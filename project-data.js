@@ -4,7 +4,8 @@
  * See README.md for the exact update steps and file locations.
  */
 window.PROJECT_DATA = {
-  lastUpdated: "29 October 2026",
+  lastUpdated: "3 November 2026",
+  teamName: "Team AHT",
 
   // Edit team names and GitHub profiles here. Emails are not published (course rule: no personal data).
   team: [
@@ -191,6 +192,13 @@ window.PROJECT_DATA = {
 },
 
   progress: [
+  {
+    "date": "3 November 2026",
+    "title": "Team name added",
+    "done": "Added the team name (Team AHT) to the page and linked each yearly source file to the publisher download.",
+    "issue": "Model results are still unpublished while the team builds its own models.",
+    "next": "Fix the two labels used for Ayutthaya in the prepared data, profile the cross-country data, then run temporal cross-validation and imbalance experiments."
+  },
   {
     "date": "29 October 2026",
     "title": "Public report updated with the locked dataset and data audit",

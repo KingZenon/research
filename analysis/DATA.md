@@ -51,6 +51,7 @@ The dataset is locked for this project. All analysis uses the eight files exactl
 - **Schema drift:** 19 columns in 2019 and 38 from 2020, with small spelling and spacing differences in names and categories. A mapping table in `code/harmonize_accidents.py` gives every column one canonical name.
 - **No serious/minor injury split in 2019**, only total injured and deaths. The three-class target therefore uses deaths and total injured.
 - **Repeated accident codes in 2023:** 1,641 codes appear more than once; 1,254 exact repeats are dropped for modelling, leaving 168,768 incidents.
+- **Two labels for one province:** Ayutthaya appears as both `อยุธยา` (2,841 rows) and `พระนครศรีอยุธยา` (271 rows). The harmonising step merges them into one label, giving 77 provinces instead of 78.
 - **Missing values:** the route name is about 13% missing overall (77% in 2024) and is not used. Road location is about 8% missing and accident type about 5%.
 - **Coordinates** outside Thailand are set to missing.
 

@@ -43,12 +43,18 @@ SCHEMA = {
 }
 LOOKUP = {thai: eng for eng, names in SCHEMA.items() for thai in names}
 
+# the same province is written two ways: Ayutthaya (2,841 rows) and Phra Nakhon Si Ayutthaya (271 rows)
+PROVINCE_FIXES = {"พระนครศรีอยุธยา": "อยุธยา"}
+
 
 def load_year(path):
     df = pd.read_csv(path, encoding="utf-8-sig", low_memory=False)
     df.columns = [str(c).replace(" ", "").strip() for c in df.columns]
     df = df.rename(columns={c: LOOKUP[c] for c in df.columns if c in LOOKUP})
     df = df[[c for c in SCHEMA if c in df.columns]].copy()
+    if "province" in df.columns:
+        df["province"] = (df["province"].astype("string").str.replace(r"\s+", "", regex=True)
+                          .replace(PROVINCE_FIXES))
     df["source_file"] = path.stem
     return df
 

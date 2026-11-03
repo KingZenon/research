@@ -171,7 +171,8 @@ function renderFiles() {
 }
 
 function renderTeam() {
-  byId("team-names").textContent = project.team.map(member => member.name).join(" · ");
+  const names = project.team.map(member => member.name).join(" · ");
+  byId("team-names").textContent = project.teamName ? `${project.teamName}: ${names}` : names;
   project.team.forEach(member => {
     const card = document.createElement("article");
     card.className = "card team-card";
