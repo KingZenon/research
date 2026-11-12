@@ -4,8 +4,84 @@
  * See README.md for the exact update steps and file locations.
  */
 window.PROJECT_DATA = {
-  lastUpdated: "3 November 2026",
+  lastUpdated: "12 November 2026",
   teamName: "Team AHT",
+
+  // Short related-work items and cleaning steps (one line each).
+  relatedWork: [
+    {
+      "cite": "Mohamad et al. (2025)",
+      "text": "Thai motorcycle crashes, 2015–2020. Random forest was best but caught only 20% of fatal crashes."
+    },
+    {
+      "cite": "Champahom et al. (2024)",
+      "text": "Thai roadway classes. XGBoost was strongest on highways."
+    },
+    {
+      "cite": "Uttra et al. (2026)",
+      "text": "Thai holiday crashes in three severity classes. XGBoost was best (83.8% accuracy)."
+    },
+    {
+      "cite": "Phojaem et al. (2026)",
+      "text": "Injury severity on highway-speed motorways, several models compared."
+    }
+  ],
+  cleaningSteps: [
+    "Merged eight yearly files (195,054 rows).",
+    "Removed 25,031 empty rows and 1 row with an invalid date, leaving 170,022 incidents.",
+    "Parsed three different date formats, one per group of files.",
+    "Harmonised column names and category spacing. Merged the two Ayutthaya labels (77 provinces).",
+    "Set coordinates outside Thailand to missing.",
+    "Kept casualty columns out of the features. Dropped 1,254 repeated accident codes (2023) for modelling."
+  ],
+
+  // Headline facts shown in the hero. Use audited values only.
+  highlights: [
+  {
+    "value": "170,022",
+    "label": "dated incidents after cleaning"
+  },
+  {
+    "value": "2019–2026",
+    "label": "eight yearly files, to 12 October 2026"
+  },
+  {
+    "value": "77",
+    "label": "provinces covered"
+  },
+  {
+    "value": "11.4%",
+    "label": "of incidents are fatal"
+  }
+],
+
+  // state is "done", "current" or "upcoming".
+  milestones: [
+  {
+    "id": "M1",
+    "title": "Pitch the idea",
+    "date": "14–16 October",
+    "state": "done"
+  },
+  {
+    "id": "M2",
+    "title": "Lock the data",
+    "date": "27 / 29 October",
+    "state": "done"
+  },
+  {
+    "id": "M3",
+    "title": "Show progress",
+    "date": "10 / 12 November",
+    "state": "current"
+  },
+  {
+    "id": "M4",
+    "title": "Final submission",
+    "date": "24 / 26 November",
+    "state": "upcoming"
+  }
+],
 
   // Edit team names and GitHub profiles here. Emails are not published (course rule: no personal data).
   team: [
@@ -27,8 +103,8 @@ window.PROJECT_DATA = {
   "status": "Locked on 29 October 2026 (audited 22 October)",
   "totalRecords": "170,022 dated incidents (195,054 rows in the files)",
   "dateRange": "1 January 2019 to 12 October 2026 (2026 is a partial year)",
-  "targetDefinition": "Three classes from casualty counts: fatal (at least one death, 11.4%), injury (no death, at least one injured, 45.0%), property damage only (no casualties, 43.6%).",
-  "cleaningSummary": "Merged eight yearly files. Removed 25,031 empty rows (21,052 in 2019, 3,979 in 2026) and one row with an invalid date. Parsed three different date formats per file, harmonised column names and category spacing, set coordinates outside Thailand to missing, and left out casualty columns from the features. For modelling, 1,254 repeated accident codes (2023) were dropped, leaving 168,768 incidents.",
+  "targetDefinition": "Fatal 11.4% · Injury 45.0% · Property damage only 43.6%, derived from casualty counts",
+  "cleaningSummary": "Merged eight yearly files. Removed 25,031 empty rows (21,052 in 2019, 3,979 in 2026) and one row with an invalid date. Parsed three different date formats per file, harmonised column names and category spacing, set coordinates outside Thailand to missing, and left out casualty columns from the features. For modelling, 1,254 repeated accident codes (2023) were dropped, leaving 168,768 incidents. The two labels used for Ayutthaya were merged, giving 77 provinces.",
   "years": [
     {
       "year": 2019,
@@ -192,64 +268,89 @@ window.PROJECT_DATA = {
 },
 
   progress: [
-  {
-    "date": "3 November 2026",
-    "title": "Team name added",
-    "done": "Added the team name (Team AHT) to the page and linked each yearly source file to the publisher download.",
-    "issue": "Model results are still unpublished while the team builds its own models.",
-    "next": "Fix the two labels used for Ayutthaya in the prepared data, profile the cross-country data, then run temporal cross-validation and imbalance experiments."
-  },
-  {
-    "date": "29 October 2026",
-    "title": "Public report updated with the locked dataset and data audit",
-    "done": "Locked the dataset (eight files with sizes and SHA-256 hashes in a manifest) and added the data audit, severity target, the data preparation code with a reproduction guide, data access notes, related work, and a public copy of the proposal with student ID numbers removed.",
-    "issue": "Model results are not published yet; they will be added at a later milestone.",
-    "next": "Add imbalance handling (class weights, SMOTE, threshold tuning), temporal cross-validation to report mean ± standard deviation, the motorcycle-only comparison, then cross-country validation."
-  },
-  {
-    "date": "26 October 2026",
-    "title": "Public website published",
-    "done": "Published the project website through GitHub Pages at https://kingzenon.github.io/research/ and checked that the page opens publicly.",
-    "issue": "The research dataset, model results, and final deliverables are still awaiting team files.",
-    "next": "Add the real data audit and measured findings when the team supplies the dataset."
-  },
-  {
-    "date": "26 October 2026",
-    "title": "Website structure prepared",
-    "done": "Created the project page and update slots for the data audit, model results, figures, files, and references.",
-    "issue": "The research dataset has not been supplied to this workspace.",
-    "next": "Add the real files and verify counts, columns, dates, and the severity target."
-  },
-  {
-    "date": "22 October 2026",
-    "title": "First models trained (internal check)",
-    "done": "Trained a first set of baseline models for three-class severity on 2019–2024 and checked them on 2025. Results are for internal use and are not published yet.",
-    "issue": "Baselines use default settings, so they are only a starting point.",
-    "next": "Add imbalance handling and tuning, then the motorcycle-only comparison."
-  },
-  {
-    "date": "22 October 2026",
-    "title": "Dataset downloaded and audited",
-    "done": "Downloaded the eight yearly files (195,054 rows), removed empty rows, found three date formats and a schema change between 2019 and 2020, harmonised names and categories, and derived the three-class severity target (170,022 dated incidents).",
-    "issue": "2019 has no serious/minor injury split, 2023 repeats 1,641 accident codes, and the route name is mostly missing in 2024.",
-    "next": "Run baseline models on a temporal split."
-  },
-  {
-    "date": "22 October 2026",
-    "title": "Benchmark paper read",
-    "done": "Read the full text of a 2025 Thai severity study (Mohamad et al.). It covers motorcycle accidents only (2015–2020, non-public data, about 24% fatal). Its best model, random forest, had accuracy 0.777 but fatal recall of only 0.198.",
-    "issue": "Its data differ from ours, so results cannot be compared directly. Always predicting non-fatal would already score about 76% on its data, so accuracy alone says little.",
-    "next": "Compare on a motorcycle-only subset of our data and report fatal-class recall, not accuracy alone."
-  }
-],
+    {
+      "date": "12 November 2026",
+      "title": "Milestone 3: first results published",
+      "done": "Cross-validation for 6 model families in 3 variants. Page redesigned. UK STATS19 (2021–2024) profiled.",
+      "issue": "Higher fatal recall costs precision, and PR-AUC stays near 0.43.",
+      "next": "Tuning, SMOTE, motorcycle subset, UK run, 2026 test score, paper draft."
+    },
+    {
+      "date": "3 November 2026",
+      "title": "Team name added",
+      "done": "Team AHT on the page. Source files link to the publisher.",
+      "next": "Merge the Ayutthaya labels, profile UK data, run cross-validation."
+    },
+    {
+      "date": "29 October 2026",
+      "title": "Dataset locked, data audit published",
+      "done": "Eight files locked with SHA-256 hashes. Audit, severity target and related work added.",
+      "next": "Cross-validation and imbalance experiments."
+    },
+    {
+      "date": "26 October 2026",
+      "title": "Website built and published",
+      "done": "Page structure created and published on GitHub Pages.",
+      "next": "Add the data audit and results."
+    },
+    {
+      "date": "22 October 2026",
+      "title": "First models trained (internal check)",
+      "done": "Baselines trained on 2019–2024 and checked on 2025. Not published.",
+      "next": "Add imbalance handling and tuning."
+    },
+    {
+      "date": "22 October 2026",
+      "title": "Dataset downloaded and audited",
+      "done": "195,054 rows merged, three date formats handled, severity target derived.",
+      "issue": "2019 lacks a serious/minor split. 2023 repeats 1,641 accident codes.",
+      "next": "Run baseline models."
+    },
+    {
+      "date": "22 October 2026",
+      "title": "Benchmark paper read",
+      "done": "Mohamad et al. (2025): motorcycle crashes only, random forest fatal recall 0.198.",
+      "issue": "Different data, so not directly comparable.",
+      "next": "Motorcycle-only comparison on our data."
+    }
+  ],
 
+  // Scores, charts and the results table come from results-data.js (generated). Only text lives here.
   results: {
-  "status": "Not published yet",
-  "summary": "Model results are not published yet. They will appear here at a later milestone.",
-  "interpretation": "No experimental conclusions are reported yet.",
-  "models": [],
-  "figures": []
-},
+    "status": "First results · 12 November 2026",
+    "summary": "Four rolling folds, validated on 2022–2025. Class weights raise fatal recall at a cost in precision.",
+    "takeaways": [
+    "Every model beats the majority-class baseline (macro-F1 0.48–0.54 against 0.205).",
+    "Plain models find only 14–26% of fatal incidents.",
+    "Class weights or prior adjustment lift that to 0.54–0.68 for most models, but fatal precision falls to about 0.26–0.37.",
+    "PR-AUC does not change (about 0.43 for the best models): the cut-off moves, the ranking does not improve."
+  ],
+    "limits": [
+    "Untuned settings and only four folds.",
+    "The fatal share falls over time (13.8% to 9.9%), and the data has no rider or driver variables.",
+    "The 2026 test year is not scored yet."
+  ],
+    "draft": {
+      "working": [
+        "Reproducible pipeline: eight locked files and 170,022 dated incidents.",
+        "Every model beats the majority-class baseline.",
+        "Class weights more than double fatal recall for XGBoost and LightGBM in every validation year."
+      ],
+      "notWorking": [
+        "Fatal precision drops to about 0.35 when recall rises.",
+        "PR-AUC stays near 0.43 for the best models: ranking is not improving.",
+        "Injury and property damage only are often confused.",
+        "No tuning, SMOTE, test-year score or UK run yet."
+      ],
+      "fixes": [
+        "Tune inside the training years and add SMOTE.",
+        "Engineer new features (holidays, road class, location history).",
+        "Run a motorcycle-only subset and the UK STATS19 data.",
+        "Pick one model on validation, score 2026 once, explain with SHAP."
+      ]
+    },
+    "figures": []
+  },
 
   files: [
   {
@@ -280,6 +381,16 @@ window.PROJECT_DATA = {
   {
     "label": "Dataset lock manifest (file sizes and SHA-256 hashes)",
     "path": "analysis/data-manifest.csv",
+    "type": "DATA"
+  },
+  {
+    "label": "Cross-validation results, summary (mean and standard deviation)",
+    "path": "analysis/results/cv_temporal_thai_summary.csv",
+    "type": "DATA"
+  },
+  {
+    "label": "Cross-validation results, every fold",
+    "path": "analysis/results/cv_temporal_thai_folds.csv",
     "type": "DATA"
   },
   {

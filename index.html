@@ -3,18 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Research on road accident severity in Thailand.">
+  <meta name="description" content="Team AHT research on road accident severity in Thailand: data, method, progress and results.">
   <title>Team AHT | Road Accident Severity in Thailand</title>
-  <link rel="stylesheet" href="styles.css?v=update-20261029">
-  <script src="project-data.js?v=update-20261029" defer></script>
-  <script src="script.js?v=update-20261029" defer></script>
+  <link rel="stylesheet" href="styles.css?v=m3-20261112i">
+  <script src="project-data.js?v=m3-20261112i" defer></script>
+  <script src="results-data.js?v=m3-20261112i" defer></script>
+  <script src="script.js?v=m3-20261112i" defer></script>
 </head>
 <body>
-  <noscript><div class="container" style="padding:16px">This page needs JavaScript to show the data tables, progress log, results and file links. The content is stored in project-data.js in the repository.</div></noscript>
+  <noscript><div class="container noscript-note">This page needs JavaScript to show the data tables, charts, progress log, results and file links. The content is stored in project-data.js and results-data.js in the repository.</div></noscript>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <nav class="container navigation" aria-label="Main navigation">
-      <a class="brand" href="#home">ICT<span>324</span><small>ROAD SAFETY RESEARCH</small></a>
+      <a class="brand" href="#home"><span class="brand-mark" aria-hidden="true"></span><span class="brand-text">Team AHT<small>ICT324 · Road safety research</small></span></a>
       <button class="menu-toggle" type="button" aria-controls="nav-links" aria-expanded="false" aria-label="Open navigation">☰</button>
       <div class="nav-links" id="nav-links">
         <a href="#problem">Problem</a>
@@ -31,104 +32,168 @@
   <main id="main">
     <section class="hero" id="home">
       <div class="container">
-        <p class="eyebrow">ICT324 · CLASSIFICATION RESEARCH</p>
+        <p class="eyebrow">ICT324 · Classification research</p>
         <h1>Predicting road accident <em>severity</em> in Thailand</h1>
-        <p class="hero-lead">A study of crash severity (fatal, injury, property damage only) on Thailand's Ministry of Transport road network.</p>
+        <p class="hero-lead">Which crashes on Thailand's Ministry of Transport road network turn fatal? We classify each incident as fatal, injury, or property damage only, and test how well models find the fatal ones.</p>
         <div class="hero-actions">
-          <a class="button button-primary" href="#data">Explore the project <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 3v10m-4-4 4 4 4-4"/></svg></a>
+          <a class="button button-primary" href="#results">See the results <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 3v10m-4-4 4 4 4-4"/></svg></a>
           <a class="button button-outline" href="#files">Project files <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 11 11 5M5 5h6v6"/></svg></a>
         </div>
-        <div class="hero-meta">
-          <div><span>TEAM</span><strong id="team-names">Team AHT: Aung Ko Ko Minn · Htoo Myat Htin Lynn · Thant Mg Mg Lwin</strong></div>
-          <div><span>TRACK</span><strong>Three-class classification with cross-country validation</strong></div>
-          <div><span>LAST UPDATED</span><strong id="last-updated">3 November 2026</strong></div>
-        </div>
+        <dl class="hero-meta">
+          <div><dt>Team</dt><dd id="team-names">Team AHT: Aung Ko Ko Minn · Htoo Myat Htin Lynn · Thant Mg Mg Lwin</dd></div>
+          <div><dt>Track</dt><dd>Three-class classification with cross-country validation</dd></div>
+          <div><dt>Last updated</dt><dd id="last-updated">12 November 2026</dd></div>
+        </dl>
+        <div class="stat-row" id="hero-stats" aria-label="Dataset at a glance"></div>
+      </div>
+    </section>
+
+    <section class="milestone-band" aria-label="Project milestones">
+      <div class="container">
+        <ol class="milestones" id="milestones"></ol>
       </div>
     </section>
 
     <section class="section" id="problem">
       <div class="container">
-        <p class="eyebrow">01 / THE PROBLEM</p>
-        <h2>Detect the crashes that matter most.</h2>
-        <p class="section-lead">Fatal crashes are about 11% of incidents in the audited data (19,437 of 170,022). Overall accuracy alone can hide missed fatal cases, so the evaluation reports fatal-class recall together with precision, macro-F1 and balanced accuracy.</p>
+        <header class="section-head">
+          <p class="eyebrow"><span>01</span> The problem</p>
+          <h2>Detect the crashes that matter most.</h2>
+          <p class="section-lead">Fatal crashes are 11% of incidents (19,437 of 170,022), so accuracy alone hides missed fatal cases. We report fatal recall and precision, macro-F1 and balanced accuracy.</p>
+        </header>
         <div class="card-grid three">
           <article class="card"><span class="card-number">01</span><h3>Research question</h3><p>Which model and imbalance strategy improves fatal-crash detection across three severity classes (fatal, injury, property damage only) while keeping false alarms useful?</p></article>
           <article class="card"><span class="card-number">02</span><h3>Factors</h3><p>Examine the time, location, road, vehicle, and cause fields in the audited files. Casualty counts define the target, so they are kept out of the features.</p></article>
-          <article class="card"><span class="card-number">03</span><h3>Generalisation</h3><p>Train on 2019–2024, validate on 2025 and test once on 2026 to measure change over time. A comparison with another country's data is planned.</p></article>
+          <article class="card"><span class="card-number">03</span><h3>Generalisation</h3><p>Train on earlier years and validate on later ones, keeping 2026 as a test year used once at the end. A comparison with another country's data is planned.</p></article>
         </div>
-        <div class="card interpretation"><h3>Related work</h3><p>Mohamad et al. (2025), read in full, compared eight classifiers on 112,837 Thai motorcycle accidents (2015–2020) and found random forest best (accuracy 0.777) but fatal recall only 0.198. Champahom et al. (2024) report XGBoost as the strongest tree-based model on Thai highways, and Uttra et al. (2026) report XGBoost best (validation accuracy 83.8%) for three-class holiday-period crashes in Thailand. Phojaem et al. (2026) compare injury-severity models for highway-speed motorways. Gradient-boosted trees therefore look like the strongest candidates, and weak fatal-crash recall is the common problem. This project adds a multi-year, three-class benchmark on the Ministry of Transport network with temporal validation. Details beyond the first paper come from abstracts and are still being checked against the full texts. See the reference list below.</p></div>
+        <div class="card"><h3>Related work</h3>
+          <ul class="related-list" id="related-work"></ul>
+          <p class="small-note">Common finding: boosted trees do well, but fatal crashes are the ones models miss. We add a multi-year, three-class benchmark with temporal validation. Only Mohamad et al. was read in full; the others are from abstracts.</p>
+        </div>
       </div>
     </section>
 
     <section class="section alternate" id="data">
       <div class="container">
-        <div class="section-top"><div><p class="eyebrow">02 / DATA</p><h2>TRAMS dataset profile</h2></div><span class="status" id="data-status"></span></div>
-        <p class="section-lead">The source is the Ministry of Transport TRAMS incident dataset. The audit below covers all eight yearly files, and the dataset is locked as of 29 October 2026: file sizes and SHA-256 hashes are in the lock manifest. Full access notes and download links are in the data guide.</p>
+        <header class="section-head">
+          <div class="section-top"><p class="eyebrow"><span>02</span> Data</p><span class="status" id="data-status"></span></div>
+          <h2>TRAMS dataset profile</h2>
+          <p class="section-lead">Ministry of Transport TRAMS incidents in eight yearly files, locked on 29 October 2026. File hashes are in the lock manifest.</p>
+        </header>
         <div class="card-grid two">
-          <article class="card dark-card">
-            <h3>Source</h3>
-            <p>Road accidents on national highways, rural highways, and expressways.</p>
-            <a href="https://data.go.th/en/dataset/gdpublish-roadaccident" target="_blank" rel="noopener noreferrer">Open official listing <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 11 11 5M5 5h6v6"/></svg></a>
-          </article>
           <article class="card">
             <h3>Verified data audit</h3>
             <dl class="fact-list" id="data-facts"></dl>
-            <p class="small-note" id="data-note"></p>
+            <a class="text-link" href="https://data.go.th/en/dataset/gdpublish-roadaccident" target="_blank" rel="noopener noreferrer">Open the official listing <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 11 11 5M5 5h6v6"/></svg></a>
+          </article>
+          <article class="card">
+            <h3>Severity classes</h3>
+            <p class="card-sub">Share of the 170,022 dated incidents in each class.</p>
+            <div class="segbar" id="severity-bar" role="img"></div>
+            <ul class="legend" id="severity-legend"></ul>
+            <p class="small-note">The classes are derived from casualty counts, because the files have no ready-made severity field.</p>
+          </article>
+        </div>
+        <div class="card-grid two">
+          <figure class="card chart-card">
+            <h3>Fatal share by accident year</h3>
+            <p class="card-sub">Fatal incidents as a share of all incidents in each year.</p>
+            <div class="chart" id="chart-fatal-share"></div>
+            <figcaption class="small-note">2026 is a partial year, to 12 October. The yearly counts are in the table below.</figcaption>
+          </figure>
+          <article class="card">
+            <h3>What we changed while cleaning</h3>
+            <ul class="check-list" id="cleaning-steps"></ul>
           </article>
         </div>
         <div class="card table-card">
           <h3>Yearly file audit</h3>
           <div class="table-scroll"><table><thead><tr><th>Year</th><th>Records</th><th>Date range</th><th>Source file</th></tr></thead><tbody id="year-rows"></tbody></table></div>
         </div>
-        <div class="card table-card">
-          <h3>Data dictionary</h3>
+        <details class="card table-card" open>
+          <summary><h3>Data dictionary</h3><span class="summary-hint">20 columns</span></summary>
           <div class="table-scroll"><table><thead><tr><th>Original column</th><th>English name</th><th>Use and cleaning note</th></tr></thead><tbody id="column-rows"></tbody></table></div>
-        </div>
+        </details>
       </div>
     </section>
 
     <section class="section" id="method">
       <div class="container">
-        <p class="eyebrow">03 / METHOD</p>
-        <h2>Reproducible analysis workflow</h2>
-        <p class="section-lead">This is the analysis plan. Completed steps and changes are recorded in the progress log.</p>
+        <header class="section-head">
+          <p class="eyebrow"><span>03</span> Method</p>
+          <h2>Reproducible analysis workflow</h2>
+          <p class="section-lead">We follow CRISP-DM. Completed steps are in the progress log.</p>
+        </header>
         <div class="card-grid four">
           <article class="card"><span class="card-number">01</span><h3>Prepare</h3><p>Merge yearly files, harmonise names, dates and categories, document missing values, and derive a three-class severity target (fatal, injury, property damage only).</p></article>
-          <article class="card"><span class="card-number">02</span><h3>Compare</h3><p>Start from a majority-class baseline, logistic regression, decision tree, random forest, XGBoost and LightGBM. Then compare class weights, SMOTE and tuned thresholds.</p></article>
-          <article class="card"><span class="card-number">03</span><h3>Validate</h3><p>Validate on 2025 and keep 2026 as a held-out test used once at the end. Use cross-validation only within training years and report the exact split.</p></article>
-          <article class="card"><span class="card-number">04</span><h3>Interpret</h3><p>Report fatal-class recall, precision, F1, PR-AUC, macro-F1, balanced accuracy, confusion matrices, and meaningful error patterns.</p></article>
+          <article class="card"><span class="card-number">02</span><h3>Compare</h3><p>A majority-class baseline, then logistic regression, decision tree, random forest, XGBoost and LightGBM. Each is run plain, with class weights, and with prior-adjusted decisions.</p></article>
+          <article class="card"><span class="card-number">03</span><h3>Validate</h3><p>Four rolling folds: train on earlier years, validate on the next year. Scores are reported as mean ± standard deviation. The 2026 test year is used once at the end.</p></article>
+          <article class="card"><span class="card-number">04</span><h3>Interpret</h3><p>Report fatal-class recall, precision, F1, PR-AUC, macro-F1 and balanced accuracy, then explain errors and important features.</p></article>
         </div>
-        <p class="callout">Potential hotspots can be explored after location coverage and data quality are checked. Any clustering method and evaluation will be documented with the results.</p>
+        <div class="card table-card">
+          <h3>Validation folds</h3>
+          <p class="card-sub">Each fold trains only on years before its validation year, so no future data leaks into training.</p>
+          <div class="table-scroll"><table><thead><tr><th>Fold</th><th>Training years</th><th>Validation year</th><th>Training incidents</th><th>Validation incidents</th><th>Fatal share in validation</th></tr></thead><tbody id="fold-rows"></tbody></table></div>
+        </div>
+        <p class="callout">Still planned: SMOTE and hyper-parameter tuning, a motorcycle-only comparison with earlier Thai work, the same pipeline on UK road-casualty data, and a single final score on the 2026 test year.</p>
       </div>
     </section>
 
     <section class="section alternate" id="progress">
       <div class="container">
-        <p class="eyebrow">04 / PROGRESS LOG</p>
-        <h2>Dated work and decisions</h2>
+        <header class="section-head">
+          <p class="eyebrow"><span>04</span> Progress log</p>
+          <h2>Dated work and decisions</h2>
+        </header>
         <div class="timeline" id="progress-entries"></div>
+        <details class="card older" id="older-progress">
+          <summary><h3>Earlier entries</h3><span class="summary-hint" id="older-count"></span></summary>
+          <div class="timeline" id="older-entries"></div>
+        </details>
       </div>
     </section>
 
     <section class="section" id="results">
       <div class="container">
-        <div class="section-top"><div><p class="eyebrow">05 / RESULTS</p><h2>Measured findings</h2></div><span class="status" id="results-status"></span></div>
-        <p class="section-lead" id="results-summary"></p>
-        <div class="card table-card">
-          <h3>Model comparison</h3>
-          <div class="table-scroll"><table><thead><tr><th>Model</th><th>Test period</th><th>Fatal recall</th><th>Fatal precision</th><th>Fatal F1</th><th>PR-AUC</th><th>Macro F1</th></tr></thead><tbody id="model-rows"></tbody></table></div>
-          <p class="small-note">Report cross-validation mean ± standard deviation separately from temporal holdout scores.</p>
+        <header class="section-head">
+          <div class="section-top"><p class="eyebrow"><span>05</span> Results</p><span class="status" id="results-status"></span></div>
+          <h2>Measured findings</h2>
+          <p class="section-lead" id="results-summary"></p>
+        </header>
+        <div class="stat-row light" id="result-stats" aria-label="Headline results"></div>
+        <div class="card chart-card" id="variant-chart-card">
+          <h3>Handling imbalance trades precision for recall</h3>
+          <p class="card-sub">Fatal-class recall and precision for each model: mean over four validation years, with ± one standard deviation.</p>
+          <ul class="legend" id="variant-legend"></ul>
+          <div class="card-grid two chart-pair" id="result-figures"></div>
+          <p class="small-note">The majority-class baseline finds no fatal incidents (recall 0), so it is listed in the table only.</p>
         </div>
-        <div class="card-grid two" id="result-figures"></div>
-        <div class="card interpretation"><h3>Interpretation and limitations</h3><p id="results-interpretation"></p></div>
+        <div class="card table-card">
+          <div class="table-head">
+            <div><h3>Model comparison</h3><p class="card-sub" id="model-table-note"></p></div>
+            <div class="switch" id="variant-tabs" role="group" aria-label="Choose a variant"></div>
+          </div>
+          <p class="variant-desc" id="variant-desc"></p>
+          <div class="table-scroll"><table class="results-table"><thead><tr><th>Model</th><th>Fatal recall</th><th>Fatal precision</th><th>Fatal F1</th><th>Fatal PR-AUC</th><th>Macro-F1</th><th>Balanced accuracy</th></tr></thead><tbody id="model-rows"></tbody></table></div>
+          <p class="small-note">The highlighted value is the best model in the selected variant. The small grey figure is the standard deviation across folds.</p>
+        </div>
+        <h3 class="subhead">First draft status</h3>
+        <div class="card-grid three" id="draft-status"></div>
+        <h3 class="subhead">What the results say</h3>
+        <div class="card-grid two">
+          <article class="card"><h3>Key takeaways</h3><ul class="bullets" id="results-takeaways"></ul></article>
+          <article class="card"><h3>Limitations</h3><ul class="bullets" id="results-limits"></ul></article>
+        </div>
       </div>
     </section>
 
     <section class="section alternate" id="files">
       <div class="container">
-        <p class="eyebrow">06 / FILES &amp; REFERENCES</p>
-        <h2>Project materials</h2>
-        <p class="section-lead">Links become active when files are added. The source dataset stays linked to its publisher; the raw files are not copied into this repository.</p>
+        <header class="section-head">
+          <p class="eyebrow"><span>06</span> Files &amp; references</p>
+          <h2>Project materials</h2>
+          <p class="section-lead">The raw data stays with its publisher and is not copied into this repository.</p>
+        </header>
         <div class="card-grid two">
           <div class="card"><h3>Downloads and links</h3><div id="file-list"></div></div>
           <div class="card"><h3>References</h3><ol class="references" id="reference-list"></ol><p class="small-note">More verified references will be added; the final paper needs at least 10 recent related works.</p></div>
@@ -138,14 +203,17 @@
 
     <section class="section" id="team">
       <div class="container">
-        <p class="eyebrow">07 / TEAM</p>
-        <h2>Meet the research team</h2>
-        <p class="section-lead">Team AHT: connect with the people working on this project.</p>
+        <header class="section-head">
+          <p class="eyebrow"><span>07</span> Team</p>
+          <h2>Meet the research team</h2>
+          <p class="section-lead">Team AHT: connect with the people working on this project.</p>
+        </header>
         <div class="card-grid three" id="team-members"></div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer"><div class="container"><strong>ICT324 · Road Safety Research</strong><p>Rangsit University International College</p><a href="#home">Back to top <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 13V3M4 7l4-4 4 4"/></svg></a></div></footer>
+  <footer class="site-footer"><div class="container"><div><strong>Team AHT · ICT324 Road Safety Research</strong><p>Rangsit University International College</p></div><a href="#home">Back to top <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 13V3M4 7l4-4 4 4"/></svg></a></div></footer>
+  <div class="tooltip" id="tooltip" role="status" aria-live="polite" hidden></div>
 </body>
 </html>

@@ -13,6 +13,7 @@ const localPaths = [
   "styles.css",
   "script.js",
   "project-data.js",
+  "results-data.js",
   ...project.files.map(item => item.path).filter(Boolean),
   ...project.results.figures.map(item => item.path)
 ];
@@ -27,11 +28,13 @@ for (const item of localPaths) {
 }
 
 const requiredIds = [
-  "last-updated", "data-status", "data-facts", "data-note",
+  "last-updated", "data-status", "data-facts", "cleaning-steps", "related-work", "older-entries",
   "year-rows", "column-rows", "progress-entries", "results-status",
   "results-summary", "model-rows", "result-figures",
-  "results-interpretation", "file-list", "reference-list",
-  "team-names", "team-members"
+  "results-takeaways", "results-limits", "file-list", "reference-list",
+  "team-names", "team-members", "hero-stats", "milestones",
+  "severity-bar", "severity-legend", "chart-fatal-share", "fold-rows",
+  "result-stats", "variant-legend", "model-table-note", "draft-status", "tooltip"
 ];
 for (const id of requiredIds) {
   if (!html.includes(`id="${id}"`)) problems.push(`Missing page target: ${id}`);

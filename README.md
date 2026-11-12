@@ -5,7 +5,7 @@ Repository: https://github.com/KingZenon/Research
 
 This is a static project website. Open `index.html` directly, or run `python -m http.server 8000` in this folder and visit `http://localhost:8000/`. No build step or online CSS library is required.
 
-The data audit, dataset lock, related work, data preparation code and a public copy of the proposal are in place (see the progress log on the site). Model results are intentionally not published yet and stay visibly pending. **Do not enter estimated values.**
+The data audit, dataset lock, related work, first model results (Milestone 3), analysis code and a public copy of the proposal are in place (see the progress log on the site). Values that are not measured yet stay visibly pending. **Do not enter estimated values.**
 
 ## Where to put new materials
 
@@ -28,8 +28,8 @@ To update the team section, edit the `team` list near the top of `project-data.j
 
 1. Set `data.totalRecords`, `dateRange`, `targetDefinition`, `cleaningSummary`, and each audited year. Add the real Thai column names, English labels, and cleaning notes to `data.columns`.
 2. Add a dated `progress` entry describing work completed, issues, and next action. Set `lastUpdated` to the newest actual update date.
-3. Enter measured model scores in `results.models`. Each row needs the model name, test period, fatal recall, fatal precision, fatal F1, PR-AUC, and macro F1. Keep cross-validation mean ± standard deviation and held-out results clearly distinguished in the summary or separate rows.
-4. Add figures and a plain-language interpretation, including limitations. Set `results.status` only when results are actually measured.
+3. Model scores are **not typed by hand**. Rerun the experiments, then run `analysis/code/export_site_results.py` to rebuild `results-data.js`; the results table, stat tiles and charts read that file. Write the summary, interpretation and first-draft status text in `results` in `project-data.js`.
+4. Update `highlights` (hero facts) and `milestones` (set each `state` to `done`, `current` or `upcoming`). Set `results.status` only when results are actually measured.
 5. Add verified references with full citation details and URLs. The course requires at least 10 recent research references in the final paper. The dataset source is already listed.
 6. Set each pending `files[].path` after placing the file. A `null` path stays visibly marked **Awaiting file**.
 
@@ -41,5 +41,5 @@ To update the team section, edit the `team` list near the top of `project-data.j
 - Open the public URL in a signed-out browser to confirm it works without login.
 - Submit the public URL on Google Classroom when ready. GitHub Pages is configured from the `main` branch at the repository root; Classroom submission remains a team action.
 
-The website code is split by purpose: `index.html` contains page structure, `styles.css` contains layout and responsive rules, `project-data.js` contains research content, and `script.js` renders the content and controls the mobile menu.
+The website code is split by purpose: `index.html` contains page structure, `styles.css` contains the design, layout and responsive rules, `project-data.js` contains research text, `results-data.js` contains measured numbers (generated), and `script.js` renders the content, draws the charts and controls the mobile menu. When you change `styles.css`, `script.js` or the data files, change the `?v=` tag on their links in `index.html` so browsers load the new version.
 
