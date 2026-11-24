@@ -1,0 +1,59 @@
+{
+  "rows": 412276,
+  "years": {
+    "2021": 101087,
+    "2022": 106004,
+    "2023": 104258,
+    "2024": 100927
+  },
+  "classShare": {
+    "fatal": 0.0148,
+    "serious": 0.22223,
+    "slight": 0.76297
+  },
+  "fatalShareByYear": {
+    "2021": 0.01458,
+    "2022": 0.01511,
+    "2023": 0.0146,
+    "2024": 0.01488
+  },
+  "categorical": [
+    "police_force",
+    "local_authority_ons_district",
+    "first_road_class",
+    "road_type",
+    "junction_detail",
+    "junction_control",
+    "second_road_class",
+    "pedestrian_crossing",
+    "light_conditions",
+    "weather_conditions",
+    "road_surface_conditions",
+    "special_conditions_at_site",
+    "carriageway_hazards",
+    "urban_or_rural_area",
+    "trunk_road_flag"
+  ],
+  "numeric": [
+    "lat",
+    "lon",
+    "n_vehicles",
+    "speed_limit",
+    "hour",
+    "month",
+    "weekday",
+    "is_weekend",
+    "is_night"
+  ],
+  "missing": {
+    "lat": 0.00012,
+    "lon": 0.00012,
+    "n_vehicles": 0.0,
+    "speed_limit": 1e-05,
+    "hour": 0.0,
+    "month": 0.0,
+    "weekday": 0.0,
+    "is_weekend": 0.0,
+    "is_night": 0.0
+  }
+}

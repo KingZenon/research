@@ -5,10 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Team AHT research on road accident severity in Thailand: data, method, progress and results.">
   <title>Team AHT | Road Accident Severity in Thailand</title>
-  <link rel="stylesheet" href="styles.css?v=m3-20261112i">
-  <script src="project-data.js?v=m3-20261112i" defer></script>
+  <link rel="stylesheet" href="styles.css?v=m4-20261124d">
+  <script src="project-data.js?v=m4-20261124d" defer></script>
   <script src="results-data.js?v=m3-20261112i" defer></script>
-  <script src="script.js?v=m3-20261112i" defer></script>
+  <script src="figures-data.js?v=m4-20261124d" defer></script>
+  <script src="map-data.js?v=m4-20261124d" defer></script>
+  <script src="final-data.js?v=m4-20261124d" defer></script>
+  <script src="script.js?v=m4-20261124d" defer></script>
 </head>
 <body>
   <noscript><div class="container noscript-note">This page needs JavaScript to show the data tables, charts, progress log, results and file links. The content is stored in project-data.js and results-data.js in the repository.</div></noscript>
@@ -41,7 +44,7 @@
         </div>
         <dl class="hero-meta">
           <div><dt>Team</dt><dd id="team-names">Team AHT: Aung Ko Ko Minn · Htoo Myat Htin Lynn · Thant Mg Mg Lwin</dd></div>
-          <div><dt>Track</dt><dd>Three-class classification with cross-country validation</dd></div>
+          <div><dt>Track</dt><dd>Three-class classification, replicated on UK STATS19 data</dd></div>
           <div><dt>Last updated</dt><dd id="last-updated">12 November 2026</dd></div>
         </dl>
         <div class="stat-row" id="hero-stats" aria-label="Dataset at a glance"></div>
@@ -64,7 +67,7 @@
         <div class="card-grid three">
           <article class="card"><span class="card-number">01</span><h3>Research question</h3><p>Which model and imbalance strategy improves fatal-crash detection across three severity classes (fatal, injury, property damage only) while keeping false alarms useful?</p></article>
           <article class="card"><span class="card-number">02</span><h3>Factors</h3><p>Examine the time, location, road, vehicle, and cause fields in the audited files. Casualty counts define the target, so they are kept out of the features.</p></article>
-          <article class="card"><span class="card-number">03</span><h3>Generalisation</h3><p>Train on earlier years and validate on later ones, keeping 2026 as a test year used once at the end. A comparison with another country's data is planned.</p></article>
+          <article class="card"><span class="card-number">03</span><h3>Generalisation</h3><p>Train on earlier years and validate on later ones, with 2026 kept as a test year and scored once. The same pipeline is replicated on UK road-casualty data (STATS19).</p></article>
         </div>
         <div class="card"><h3>Related work</h3>
           <ul class="related-list" id="related-work"></ul>
@@ -106,6 +109,21 @@
             <ul class="check-list" id="cleaning-steps"></ul>
           </article>
         </div>
+        <figure class="card chart-card" id="map-card" hidden>
+          <div class="table-head">
+            <div><h3>Where incidents happen, and where they turn fatal</h3><p class="card-sub" id="map-sub"></p></div>
+            <div class="switch wrap" id="map-metric" role="group" aria-label="Choose what the map shows"></div>
+          </div>
+          <div class="map-layout">
+            <div class="chart map" id="province-map"></div>
+            <div class="map-side">
+              <ul class="legend map-legend" id="map-legend"></ul>
+              <h4 class="map-list-title" id="map-list-title"></h4>
+              <ol class="rank-list" id="map-rank"></ol>
+            </div>
+          </div>
+          <figcaption class="small-note" id="map-note"></figcaption>
+        </figure>
         <div class="card table-card">
           <h3>Yearly file audit</h3>
           <div class="table-scroll"><table><thead><tr><th>Year</th><th>Records</th><th>Date range</th><th>Source file</th></tr></thead><tbody id="year-rows"></tbody></table></div>
@@ -126,8 +144,8 @@
         </header>
         <div class="card-grid four">
           <article class="card"><span class="card-number">01</span><h3>Prepare</h3><p>Merge yearly files, harmonise names, dates and categories, document missing values, and derive a three-class severity target (fatal, injury, property damage only).</p></article>
-          <article class="card"><span class="card-number">02</span><h3>Compare</h3><p>A majority-class baseline, then logistic regression, decision tree, random forest, XGBoost and LightGBM. Each is run plain, with class weights, and with prior-adjusted decisions.</p></article>
-          <article class="card"><span class="card-number">03</span><h3>Validate</h3><p>Four rolling folds: train on earlier years, validate on the next year. Scores are reported as mean ± standard deviation. The 2026 test year is used once at the end.</p></article>
+          <article class="card"><span class="card-number">02</span><h3>Compare</h3><p>A majority-class baseline, then logistic regression, decision tree, random forest, XGBoost and LightGBM. Each is run plain, with class weights, with prior-adjusted decisions and with SMOTE-NC. XGBoost and LightGBM are also tuned inside each fold.</p></article>
+          <article class="card"><span class="card-number">03</span><h3>Validate</h3><p>Four rolling folds: train on earlier years, validate on the next year. Scores are reported as mean ± standard deviation. The model is chosen by a rule fixed beforehand and scored once on the 2026 test year.</p></article>
           <article class="card"><span class="card-number">04</span><h3>Interpret</h3><p>Report fatal-class recall, precision, F1, PR-AUC, macro-F1 and balanced accuracy, then explain errors and important features.</p></article>
         </div>
         <div class="card table-card">
@@ -135,7 +153,7 @@
           <p class="card-sub">Each fold trains only on years before its validation year, so no future data leaks into training.</p>
           <div class="table-scroll"><table><thead><tr><th>Fold</th><th>Training years</th><th>Validation year</th><th>Training incidents</th><th>Validation incidents</th><th>Fatal share in validation</th></tr></thead><tbody id="fold-rows"></tbody></table></div>
         </div>
-        <p class="callout">Still planned: SMOTE and hyper-parameter tuning, a motorcycle-only comparison with earlier Thai work, the same pipeline on UK road-casualty data, and a single final score on the 2026 test year.</p>
+        <p class="callout">Milestone 4 adds the experiments that were planned: SMOTE-NC and nested tuning, a motorcycle-only comparison with earlier Thai work, the same pipeline on UK road-casualty data, and a single score on the 2026 test year. The final paper is linked under Files.</p>
       </div>
     </section>
 
@@ -160,6 +178,22 @@
           <h2>Measured findings</h2>
           <p class="section-lead" id="results-summary"></p>
         </header>
+        <div class="card final-card" id="final-card" hidden>
+          <div class="table-head"><div><h3>Final result: the 2026 test year, scored once</h3><p class="card-sub" id="final-sub"></p></div></div>
+          <div class="stat-row light four" id="final-stats" aria-label="Final test result"></div>
+          <div class="final-grid">
+            <div class="table-scroll"><table><thead><tr><th>Metric</th><th>Selected model (95% range)</th><th>Majority class</th></tr></thead><tbody id="final-rows"></tbody></table></div>
+            <div class="cm-panel" id="final-cm"></div>
+          </div>
+          <p class="small-note" id="final-note"></p>
+        </div>
+        <div class="card table-card" id="selection-card" hidden>
+          <h3>How the model was chosen</h3>
+          <p class="card-sub" id="selection-sub"></p>
+          <div class="table-scroll"><table class="results-table"><thead><tr><th>Rank</th><th>Model</th><th>Strategy</th><th>Fatal F1 (mean ± SD)</th><th>Gap to winner</th><th>Winner ahead</th><th>Recall</th><th>Precision</th><th>PR-AUC</th></tr></thead><tbody id="selection-rows"></tbody></table></div>
+          <p class="small-note" id="selection-note"></p>
+        </div>
+        <h3 class="subhead">Cross-validation on the Thai data</h3>
         <div class="stat-row light" id="result-stats" aria-label="Headline results"></div>
         <div class="card chart-card" id="variant-chart-card">
           <h3>Handling imbalance trades precision for recall</h3>
@@ -177,7 +211,66 @@
           <div class="table-scroll"><table class="results-table"><thead><tr><th>Model</th><th>Fatal recall</th><th>Fatal precision</th><th>Fatal F1</th><th>Fatal PR-AUC</th><th>Macro-F1</th><th>Balanced accuracy</th></tr></thead><tbody id="model-rows"></tbody></table></div>
           <p class="small-note">The highlighted value is the best model in the selected variant. The small grey figure is the standard deviation across folds.</p>
         </div>
-        <h3 class="subhead">First draft status</h3>
+        <div class="card" id="error-card" hidden>
+          <div class="table-head">
+            <div><h3>Where the models go wrong</h3><p class="card-sub" id="cm-sub"></p></div>
+            <div class="switch wrap" id="cm-models" role="group" aria-label="Choose a model"></div>
+          </div>
+          <div class="cm-grid" id="cm-grid"></div>
+          <p class="small-note" id="cm-note"></p>
+        </div>
+        <div class="card-grid two" id="error-charts" hidden>
+          <figure class="card chart-card">
+            <h3>Ranking the fatal class</h3>
+            <p class="card-sub" id="pr-sub"></p>
+            <ul class="legend" id="pr-legend"></ul>
+            <div class="chart" id="chart-pr"></div>
+            <figcaption class="small-note" id="pr-note"></figcaption>
+          </figure>
+          <figure class="card chart-card">
+            <h3 id="imp-title">What the model relies on</h3>
+            <p class="card-sub" id="imp-sub"></p>
+            <div class="chart" id="chart-importance"></div>
+            <figcaption class="small-note" id="imp-note"></figcaption>
+          </figure>
+        </div>
+        <div class="card-grid two" id="strategy-cards" hidden>
+          <article class="card table-card">
+            <h3>Does tuning help?</h3>
+            <p class="card-sub" id="tuning-sub"></p>
+            <div class="table-scroll"><table><thead><tr><th>Family</th><th>PR-AUC plain → tuned</th><th>F1 weights → tuned</th></tr></thead><tbody id="tuning-rows"></tbody></table></div>
+            <p class="small-note" id="tuning-note"></p>
+          </article>
+          <article class="card table-card">
+            <h3>Does SMOTE-NC help?</h3>
+            <p class="card-sub" id="smote-sub"></p>
+            <div class="table-scroll"><table><thead><tr><th>Family</th><th>Plain</th><th>Imputed, no SMOTE</th><th>SMOTE-NC</th></tr></thead><tbody id="smote-rows"></tbody></table></div>
+            <p class="small-note" id="smote-note"></p>
+          </article>
+        </div>
+        <h3 class="subhead">Beyond the main data</h3>
+        <div class="card table-card" id="uk-card" hidden>
+          <h3>A second country: UK STATS19</h3>
+          <p class="card-sub" id="uk-sub"></p>
+          <div class="table-scroll"><table class="results-table"><thead><tr><th>Strategy (LightGBM)</th><th>Thai recall</th><th>Thai precision</th><th>Thai PR-AUC</th><th>UK recall</th><th>UK precision</th><th>UK PR-AUC</th></tr></thead><tbody id="uk-rows"></tbody></table></div>
+          <p class="small-note" id="uk-note"></p>
+        </div>
+        <div class="card table-card" id="moto-card" hidden>
+          <h3>Motorcycle-only subset</h3>
+          <p class="card-sub" id="moto-sub"></p>
+          <div class="table-scroll"><table class="results-table"><thead><tr><th>Model (default strategy)</th><th>Fatal-vs-rest accuracy</th><th>Fatal ROC-AUC</th><th>Fatal recall</th><th>Fatal precision</th></tr></thead><tbody id="moto-rows"></tbody></table></div>
+          <p class="small-note" id="moto-note"></p>
+        </div>
+        <div class="card table-card" id="recheck-card" hidden>
+          <h3>Robustness re-check</h3>
+          <p class="card-sub" id="recheck-sub"></p>
+          <div class="table-scroll"><table><thead><tr><th>Check</th><th>Before</th><th>Re-check</th></tr></thead><tbody id="recheck-rows"></tbody></table></div>
+          <p class="small-note" id="recheck-note"></p>
+          <h3 class="subhead">Where the threshold model finds fatal crashes</h3>
+          <div class="table-scroll"><table><thead><tr><th>Subgroup (2025 validation year)</th><th>Fatal incidents</th><th>Fatal recall</th></tr></thead><tbody id="recheck-sub-rows"></tbody></table></div>
+          <p class="small-note" id="recheck-errors"></p>
+        </div>
+        <h3 class="subhead">Status and open issues</h3>
         <div class="card-grid three" id="draft-status"></div>
         <h3 class="subhead">What the results say</h3>
         <div class="card-grid two">
@@ -196,7 +289,7 @@
         </header>
         <div class="card-grid two">
           <div class="card"><h3>Downloads and links</h3><div id="file-list"></div></div>
-          <div class="card"><h3>References</h3><ol class="references" id="reference-list"></ol><p class="small-note">More verified references will be added; the final paper needs at least 10 recent related works.</p></div>
+          <div class="card"><h3>References</h3><ol class="references" id="reference-list"></ol><p class="small-note">The same list as in the final paper. Papers marked as preprints are on arXiv.</p></div>
         </div>
       </div>
     </section>

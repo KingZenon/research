@@ -1,0 +1,9 @@
+{
+  "rule": "highest mean fatal-class F1 over the four validation years (2022-2025), ties by macro-F1",
+  "model": "lightgbm",
+  "tuned": true,
+  "variant": "class_weight",
+  "fatal_f1_mean": 0.4443,
+  "macro_f1_mean": 0.5489,
+  "candidates_compared": 28
+}

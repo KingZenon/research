@@ -89,15 +89,18 @@ def load(path, subset):
     return df.reset_index(drop=True)
 
 
-def make_models():
+def make_models(categorical=None, numeric=None):
+    """The model zoo. The column lists default to the Thai table; the UK replication passes its own."""
+    categorical = CATEGORICAL if categorical is None else categorical
+    numeric = NUMERIC if numeric is None else numeric
     onehot = ColumnTransformer([
-        ("cat", OneHotEncoder(handle_unknown="ignore", min_frequency=100), CATEGORICAL),
+        ("cat", OneHotEncoder(handle_unknown="ignore", min_frequency=100), categorical),
         ("num", Pipeline([("imp", SimpleImputer(strategy="median", add_indicator=True)),
-                          ("sc", StandardScaler())]), NUMERIC),
+                          ("sc", StandardScaler())]), numeric),
     ])
     ordinal = ColumnTransformer([
-        ("cat", OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=-1), CATEGORICAL),
-        ("num", "passthrough", NUMERIC),  # tree models handle missing values natively
+        ("cat", OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=-1), categorical),
+        ("num", "passthrough", numeric),  # tree models handle missing values natively
     ])
     return {
         "majority_class": DummyClassifier(strategy="most_frequent"),

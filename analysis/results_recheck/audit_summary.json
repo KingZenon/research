@@ -1,0 +1,164 @@
+{
+  "rows_2019_2025_after_dedup": 151314,
+  "class_share_overall": {
+    "fatal": 0.1157,
+    "injury": 0.448,
+    "property_only": 0.4364
+  },
+  "fatal_share_by_year": {
+    "2019": 0.1381,
+    "2020": 0.133,
+    "2021": 0.1186,
+    "2022": 0.1093,
+    "2023": 0.1089,
+    "2024": 0.1066,
+    "2025": 0.1007
+  },
+  "exact_duplicate_rows_ignoring_source_and_code": 79,
+  "duplicates_on_date_time_place_vehicle_casualties": 84,
+  "duplicates_on_that_key_by_year": {
+    "2019.0": 1,
+    "2020.0": 1,
+    "2022.0": 1,
+    "2023.0": 9,
+    "2025.0": 72
+  },
+  "lat_lon_outside_Thailand_box_or_missing": 739,
+  "km_min_max": [
+    0.002,
+    1310.43
+  ],
+  "km_negative": 0,
+  "n_vehicles_quantiles_50_99_999_max": [
+    1.0,
+    4.0,
+    8.0,
+    27.0
+  ],
+  "n_involved_quantiles_50_99_999_max": [
+    1.0,
+    5.0,
+    8.0,
+    29.0
+  ],
+  "n_vehicles_zero_or_missing": 163,
+  "hour_unparsed_total": 0,
+  "n_involved_audit": {
+    "rows_with_both_counts": 132120,
+    "share_n_involved_equals_n_vehicles": 0.9895,
+    "share_n_involved_greater": 0.0105,
+    "share_n_involved_smaller_than_vehicles": 0.0,
+    "fatal_share_when_greater": 0.6377,
+    "fatal_share_when_equal": 0.1068,
+    "share_of_all_fatal_in_rows_with_extra_persons": 0.0594,
+    "corr_extra_persons_with_deaths_plus_injured": 0.0439,
+    "single_feature_fatal_ROC_AUC_extra_persons": 0.5276,
+    "single_feature_fatal_ROC_AUC_n_involved": 0.6194,
+    "single_feature_fatal_ROC_AUC_n_vehicles": 0.5952
+  },
+  "report_date_lag_days_AUC_for_fatal_(not_used_as_feature)": 0.429,
+  "unseen_label_share_by_fold": {
+    "2022": {
+      "province": 0.0,
+      "agency": 0.0,
+      "vehicle1": 0.0,
+      "location": 0.0,
+      "cause": 0.004,
+      "acc_type": 0.0,
+      "weather": 0.0031
+    },
+    "2023": {
+      "province": 0.0,
+      "agency": 0.0,
+      "vehicle1": 0.0,
+      "location": 0.9583,
+      "cause": 0.815,
+      "acc_type": 0.0608,
+      "weather": 0.0
+    },
+    "2024": {
+      "province": 0.0,
+      "agency": 0.0,
+      "vehicle1": 0.0,
+      "location": 0.0001,
+      "cause": 0.0006,
+      "acc_type": 0.0,
+      "weather": 0.0
+    },
+    "2025": {
+      "province": 0.0,
+      "agency": 0.0,
+      "vehicle1": 0.0,
+      "location": 0.0,
+      "cause": 0.0,
+      "acc_type": 0.0,
+      "weather": 0.0
+    }
+  },
+  "n_labels_by_column_by_year": {
+    "province": {
+      "2019": 78,
+      "2020": 78,
+      "2021": 78,
+      "2022": 78,
+      "2023": 78,
+      "2024": 78,
+      "2025": 78
+    },
+    "agency": {
+      "2019": 3,
+      "2020": 3,
+      "2021": 3,
+      "2022": 3,
+      "2023": 3,
+      "2024": 3,
+      "2025": 3
+    },
+    "vehicle1": {
+      "2019": 16,
+      "2020": 16,
+      "2021": 16,
+      "2022": 16,
+      "2023": 16,
+      "2024": 16,
+      "2025": 16
+    },
+    "location": {
+      "2019": 23,
+      "2020": 23,
+      "2021": 23,
+      "2022": 22,
+      "2023": 79,
+      "2024": 24,
+      "2025": 20
+    },
+    "cause": {
+      "2019": 40,
+      "2020": 39,
+      "2021": 39,
+      "2022": 49,
+      "2023": 98,
+      "2024": 50,
+      "2025": 48
+    },
+    "acc_type": {
+      "2019": 12,
+      "2020": 12,
+      "2021": 11,
+      "2022": 12,
+      "2023": 152,
+      "2024": 11,
+      "2025": 11
+    },
+    "weather": {
+      "2019": 7,
+      "2020": 6,
+      "2021": 6,
+      "2022": 7,
+      "2023": 7,
+      "2024": 7,
+      "2025": 7
+    }
+  },
+  "note_features": "cause = presumed cause (investigator's judgement), acc_type = collision type, n_involved = vehicles AND persons involved: all are written on the report after the event; see report text"
+}

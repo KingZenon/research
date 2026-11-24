@@ -1,0 +1,4 @@
+,pred_fatal,pred_injury,pred_property_only,pred_fatal_row_pct,pred_injury_row_pct,pred_property_only_row_pct
+actual_fatal,1161,928,298,48.6,38.9,12.5
+actual_injury,1302,5374,3858,12.4,51.0,36.6
+actual_property_only,207,2709,7878,1.9,25.1,73.0

@@ -4,7 +4,7 @@
  * See README.md for the exact update steps and file locations.
  */
 window.PROJECT_DATA = {
-  lastUpdated: "12 November 2026",
+  lastUpdated: "24 November 2026",
   teamName: "Team AHT",
 
   // Short related-work items and cleaning steps (one line each).
@@ -24,6 +24,18 @@ window.PROJECT_DATA = {
     {
       "cite": "Phojaem et al. (2026)",
       "text": "Injury severity on highway-speed motorways, several models compared."
+    },
+    {
+      "cite": "Al Mamun et al. (2025)",
+      "text": "Work-zone crashes under data imbalance: lower accuracy for high-severity crashes."
+    },
+    {
+      "cite": "Zhu et al. (2025)",
+      "text": "Temporal hold-out; simple class weighting improves fatal recall at a modest accuracy cost."
+    },
+    {
+      "cite": "Elor and Averbuch-Elor (2022)",
+      "text": "Balancing generally does not help strong classifiers (73 tabular datasets)."
     }
   ],
   cleaningSteps: [
@@ -32,7 +44,8 @@ window.PROJECT_DATA = {
     "Parsed three different date formats, one per group of files.",
     "Harmonised column names and category spacing. Merged the two Ayutthaya labels (77 provinces).",
     "Set coordinates outside Thailand to missing.",
-    "Kept casualty columns out of the features. Dropped 1,254 repeated accident codes (2023) for modelling."
+    "Kept casualty columns out of the features. Dropped 1,254 repeated accident codes (2023) for modelling.",
+    "Found that the 2023 file spells many category values differently (about 82% of its presumed causes and 97% of its road locations never occur in 2019–2022). Kept as is and noted as a limitation."
   ],
 
   // Headline facts shown in the hero. Use audited values only.
@@ -73,13 +86,13 @@ window.PROJECT_DATA = {
     "id": "M3",
     "title": "Show progress",
     "date": "10 / 12 November",
-    "state": "current"
+    "state": "done"
   },
   {
     "id": "M4",
     "title": "Final submission",
     "date": "24 / 26 November",
-    "state": "upcoming"
+    "state": "current"
   }
 ],
 
@@ -269,6 +282,27 @@ window.PROJECT_DATA = {
 
   progress: [
     {
+      "date": "24 November 2026",
+      "title": "Re-check with stricter practice",
+      "done": "An independent re-check on the validation years: native categorical handling, SMOTE-NC with standardised numbers, calibration, an inner-year cut-off, feature timing and error analysis. All four conclusions still hold. The 2026 test year was not touched.",
+      "issue": "A plain model with a cut-off chosen on the last training year is as good as class weights, and class-weighted scores are not calibrated probabilities. The 2023 category spellings affect one fold.",
+      "next": "Slides, final presentation, and uploading code, data and paper."
+    },
+    {
+      "date": "23 November 2026",
+      "title": "Milestone 4: final experiments and paper draft",
+      "done": "Nested tuning and SMOTE-NC added; motorcycle subset and UK STATS19 replication run; the model chosen by a rule fixed beforehand and the 2026 test year scored once. Final paper drafted.",
+      "issue": "SMOTE-NC and tuning added little, and the leading models are statistically comparable. On motorcycle crashes the best tuned model only matches the benchmark AUC.",
+      "next": "Slides, final presentation, and uploading code, data and paper."
+    },
+    {
+      "date": "19 November 2026",
+      "title": "Error analysis and province map added",
+      "done": "Confusion matrices, fatal precision–recall curves and grouped permutation importance for the 2025 validation fold, and a province map of fatal share. A check on the vehicles-and-persons-involved column found it does not drive the scores. All drawn from generated files.",
+      "issue": "The plain and class-weighted precision–recall curves almost overlap: class weights move the cut-off, not the ranking.",
+      "next": "Tuning, SMOTE, motorcycle subset, UK run, 2026 test score, paper draft."
+    },
+    {
       "date": "12 November 2026",
       "title": "Milestone 3: first results published",
       "done": "Cross-validation for 6 model families in 3 variants. Page redesigned. UK STATS19 (2021–2024) profiled.",
@@ -317,36 +351,43 @@ window.PROJECT_DATA = {
 
   // Scores, charts and the results table come from results-data.js (generated). Only text lives here.
   results: {
-    "status": "First results · 12 November 2026",
-    "summary": "Four rolling folds, validated on 2022–2025. Class weights raise fatal recall at a cost in precision.",
+    "status": "Final results · 23 November 2026",
+    "summary": "Rolling validation on 2022–2025, nested tuning, and one score on the 2026 test year. Class weights and prior adjustment raise fatal recall at a cost in precision; tuning and SMOTE-NC add little.",
     "takeaways": [
-    "Every model beats the majority-class baseline (macro-F1 0.48–0.54 against 0.205).",
-    "Plain models find only 14–26% of fatal incidents.",
-    "Class weights or prior adjustment lift that to 0.54–0.68 for most models, but fatal precision falls to about 0.26–0.37.",
-    "PR-AUC does not change (about 0.43 for the best models): the cut-off moves, the ranking does not improve."
+    "Every model beats the majority-class baseline, and boosted trees lead.",
+    "Plain models find about a quarter of fatal incidents; class weights or prior adjustment more than double that, at a cost in precision.",
+    "The plain and weighted precision–recall curves coincide: the strategies move the cut-off, not the ranking.",
+    "SMOTE-NC and tuning added little, and the leading models are comparable (their differences are within the fold noise).",
+    "A plain model with a cut-off chosen on the last training year performs about as well as class weights, and only the plain model's scores are calibrated probabilities.",
+    "The same ordering of strategies holds on UK STATS19 data, where fatal crashes are much rarer."
   ],
     "limits": [
-    "Untuned settings and only four folds.",
-    "The fatal share falls over time (13.8% to 9.9%), and the data has no rider or driver variables.",
-    "The 2026 test year is not scored yet."
+    "Only four rolling folds, and only XGBoost and LightGBM were tuned.",
+    "The fatal share falls over time, and 2026 is a partial year (to 12 October).",
+    "The data covers the Ministry of Transport road network only, and severity is derived from casualty counts.",
+    "SMOTE-NC was tried in one configuration, on ordinal-coded categories; importance describes the model, not causes.",
+    "The 2023 file spells many category values differently, which lowers that fold's recall and F1 but not its PR-AUC.",
+    "Native categories, calibration and the cut-off rule were checked in a post hoc re-check on the validation years only.",
+    "UK classes differ from the Thai ones, and the motorcycle comparison is not like for like."
   ],
     "draft": {
       "working": [
-        "Reproducible pipeline: eight locked files and 170,022 dated incidents.",
-        "Every model beats the majority-class baseline.",
-        "Class weights more than double fatal recall for XGBoost and LightGBM in every validation year."
+        "A reproducible pipeline from locked data to a single test score.",
+        "Time-respecting validation, with the selection rule fixed before the test year.",
+        "The ordering of strategies repeats on a second country."
       ],
       "notWorking": [
-        "Fatal precision drops to about 0.35 when recall rises.",
-        "PR-AUC stays near 0.43 for the best models: ranking is not improving.",
-        "Injury and property damage only are often confused.",
-        "No tuning, SMOTE, test-year score or UK run yet."
+        "Fatal precision is low (roughly one correct alert in three), so predictions rank attention and should not trigger action alone.",
+        "SMOTE-NC and tuning did not improve the models.",
+        "Class-weighted scores are not calibrated probabilities: use the plain model for risk scores.",
+        "On motorcycle crashes the best tuned model only matches the benchmark AUC; we do not exceed it.",
+        "Several related-work papers are described from their abstracts."
       ],
       "fixes": [
-        "Tune inside the training years and add SMOTE.",
-        "Engineer new features (holidays, road class, location history).",
-        "Run a motorcycle-only subset and the UK STATS19 data.",
-        "Pick one model on validation, score 2026 once, explain with SHAP."
+        "Add weather, rainfall, road class and a Thai holiday calendar.",
+        "Choose the cut-off from an explicit cost of false alarms.",
+        "Use exposure data to turn provincial shares into risk.",
+        "Finish the slides and presentation; upload code, data and paper."
       ]
     },
     "figures": []
@@ -394,13 +435,73 @@ window.PROJECT_DATA = {
     "type": "DATA"
   },
   {
+    "label": "Confusion matrices, 2025 validation (every model and variant)",
+    "path": "analysis/results/confusion_matrices_2025.csv",
+    "type": "DATA"
+  },
+  {
+    "label": "Fatal precision at each recall level, 2025 validation",
+    "path": "analysis/results/pr_curves_fatal_2025.csv",
+    "type": "DATA"
+  },
+  {
+    "label": "Permutation importance, XGBoost with class weights",
+    "path": "analysis/results/permutation_importance_2025.csv",
+    "type": "DATA"
+  },
+  {
+    "label": "Incidents and fatal share by province (with 95% range)",
+    "path": "analysis/results/province_fatal_share.csv",
+    "type": "DATA"
+  },
+  {
+    "label": "Selection report: the leading candidates and their fold gaps",
+    "path": "analysis/results/selection_report.csv",
+    "type": "DATA"
+  },
+  {
+    "label": "Cross-validation, every model and strategy (summary)",
+    "path": "analysis/results/cv_thai_all_summary.csv",
+    "type": "DATA"
+  },
+  {
+    "label": "Tuning log (every configuration, every fold)",
+    "path": "analysis/results/tuning_thai.csv",
+    "type": "DATA"
+  },
+  {
+    "label": "2026 test result, scored once (with bootstrap ranges)",
+    "path": "analysis/results/test_2026_final.csv",
+    "type": "DATA"
+  },
+  {
+    "label": "UK STATS19 replication, summary",
+    "path": "analysis/results/cv_uk_summary.csv",
+    "type": "DATA"
+  },
+  {
+    "label": "Motorcycle subset, summary",
+    "path": "analysis/results/cv_motorcycle_summary.csv",
+    "type": "DATA"
+  },
+  {
+    "label": "Re-check: summary tables (native categories, calibration, cut-off, errors)",
+    "path": "analysis/results_recheck/report_tables.md",
+    "type": "DATA"
+  },
+  {
+    "label": "Re-check: every run (experiment log)",
+    "path": "analysis/results_recheck/experiment_log.csv",
+    "type": "DATA"
+  },
+  {
     "label": "Analysis code and reproduction guide",
     "path": "https://github.com/KingZenon/research/tree/main/analysis",
     "type": "CODE"
   },
   {
-    "label": "Final paper",
-    "path": null,
+    "label": "Final paper (draft)",
+    "path": "assets/deliverables/Team_AHT_ICT324_Final_Paper.pdf",
     "type": "PDF"
   },
   {
@@ -430,7 +531,68 @@ window.PROJECT_DATA = {
   {
     "citation": "Phojaem, T., Se, C., Wisutwattanasak, P., Champahom, T., Jomnonkwao, S., & Ratanavaraha, V. (2026). Comparative injury-severity modeling on highway-speed motorways: Performance, interpretability, and policy implications. Case Studies on Transport Policy, 24.",
     "url": "https://doi.org/10.1016/j.cstp.2026.101826"
+  },
+  {
+    "citation": "Simmachan, T., & Boonkrong, P. (2025). Effect of resampling techniques on machine learning models for classifying road accident severity in Thailand. Journal of Current Science and Technology, 15(2).",
+    "url": "https://ph04.tci-thaijo.org/index.php/JCST/article/view/6443"
+  },
+  {
+    "citation": "Al Mamun, A., Enan, A., Indah, D. A., Mwakalonge, J., Comert, G., & Chowdhury, M. (2025). Crash severity risk modeling strategies under data imbalance. arXiv preprint arXiv:2412.02094.",
+    "url": "https://arxiv.org/abs/2412.02094"
+  },
+  {
+    "citation": "Zhu, D., Xie, C., Wang, Z., & Zhang, H. (2025). RaX-Crash: A resource efficient and explainable small model pipeline with an application to city scale injury severity prediction. arXiv preprint arXiv:2512.07848.",
+    "url": "https://arxiv.org/abs/2512.07848"
+  },
+  {
+    "citation": "Elor, Y., & Averbuch-Elor, H. (2022). To SMOTE, or not to SMOTE? arXiv preprint arXiv:2201.08528.",
+    "url": "https://arxiv.org/abs/2201.08528"
+  },
+  {
+    "citation": "Sufian, M. A., & Varadarajan, J. (2023). Enhancing prediction and analysis of UK road traffic accident severity using AI: Integration of machine learning, econometric techniques, and time series forecasting in public health research. arXiv preprint arXiv:2309.13483.",
+    "url": "https://arxiv.org/abs/2309.13483"
+  },
+  {
+    "citation": "Tong, Y. (2025). Non-linear determinants of pedestrian injury severity: Evidence from administrative data in Great Britain. arXiv preprint arXiv:2512.04022.",
+    "url": "https://arxiv.org/abs/2512.04022"
+  },
+  {
+    "citation": "Kapoor, S., & Narayanan, A. (2023). Leakage and the reproducibility crisis in machine-learning-based science. Patterns, 4(9), 100804.",
+    "url": "https://doi.org/10.1016/j.patter.2023.100804"
+  },
+  {
+    "citation": "Grinsztajn, L., Oyallon, E., & Varoquaux, G. (2022). Why do tree-based models still outperform deep learning on typical tabular data? Advances in Neural Information Processing Systems 35 (Datasets and Benchmarks Track).",
+    "url": "https://arxiv.org/abs/2207.08815"
+  },
+  {
+    "citation": "Chawla, N. V., Bowyer, K. W., Hall, L. O., & Kegelmeyer, W. P. (2002). SMOTE: Synthetic minority over-sampling technique. Journal of Artificial Intelligence Research, 16, 321–357.",
+    "url": "https://doi.org/10.1613/jair.953"
+  },
+  {
+    "citation": "Chen, T., & Guestrin, C. (2016). XGBoost: A scalable tree boosting system. Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, 785–794.",
+    "url": "https://doi.org/10.1145/2939672.2939785"
+  },
+  {
+    "citation": "Ke, G., et al. (2017). LightGBM: A highly efficient gradient boosting decision tree. Advances in Neural Information Processing Systems 30, 3146–3154."
+  },
+  {
+    "citation": "Saito, T., & Rehmsmeier, M. (2015). The precision-recall plot is more informative than the ROC plot when evaluating binary classifiers on imbalanced datasets. PLoS ONE, 10(3), e0118432.",
+    "url": "https://doi.org/10.1371/journal.pone.0118432"
+  },
+  {
+    "citation": "Wirth, R., & Hipp, J. (2000). CRISP-DM: Towards a standard process model for data mining. Proceedings of the 4th International Conference on the Practical Applications of Knowledge Discovery and Data Mining, 29–39."
+  },
+  {
+    "citation": "Department for Transport (UK). Road safety data (STATS19), collision files 2021–2024.",
+    "url": "https://www.gov.uk/government/statistics/road-safety-data"
+  },
+  {
+    "citation": "Pedregosa, F., et al. (2011). Scikit-learn: Machine learning in Python. Journal of Machine Learning Research, 12, 2825–2830.",
+    "url": "https://jmlr.org/papers/v12/pedregosa11a.html"
+  },
+  {
+    "citation": "Lemaître, G., Nogueira, F., & Aridas, C. K. (2017). Imbalanced-learn: A Python toolbox to tackle the curse of imbalanced datasets in machine learning. Journal of Machine Learning Research, 18(17), 1–5.",
+    "url": "https://jmlr.org/papers/v18/16-365.html"
   }
 ]
-    // Add at least 10 checked research references with complete citation and URL.
 };

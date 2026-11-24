@@ -1,0 +1,63 @@
+﻿kind,column,label,share_in_errors,share_in_reference,lift
+false_negative(300 lowest P),vehicle,pickup/4-wheel truck,0.437,0.244,1.79
+false_negative(300 lowest P),vehicle,car (private/public),0.29,0.184,1.57
+false_negative(300 lowest P),vehicle,truck >10 wheels (trailer),0.09,0.07,1.28
+false_negative(300 lowest P),vehicle,motorcycle,0.067,0.36,0.19
+false_negative(300 lowest P),cause,ขับรถเร็วเกินอัตรากำหนด,0.72,0.647,1.11
+false_negative(300 lowest P),cause,หลับใน,0.093,0.063,1.48
+false_negative(300 lowest P),cause,คน/รถ/สัตว์ตัดหน้ากระชั้นชิด,0.043,0.132,0.33
+false_negative(300 lowest P),cause,ยางเสื่อมสภาพ/ยางแตก,0.027,0.004,7.07
+false_negative(300 lowest P),acc_type,พลิกคว่ำ/ตกถนนในทางตรง,0.527,0.201,2.62
+false_negative(300 lowest P),acc_type,ชนท้าย,0.27,0.346,0.78
+false_negative(300 lowest P),acc_type,พลิกคว่ำ/ตกถนนในทางโค้ง,0.1,0.046,2.17
+false_negative(300 lowest P),acc_type,ชนสิ่งกีดขวาง(บนผิวจราจร),0.05,0.09,0.56
+false_negative(300 lowest P),location,ทางตรง+ไม่มีความลาดชัน,0.69,0.688,1.0
+false_negative(300 lowest P),location,missing,0.133,0.123,1.08
+false_negative(300 lowest P),location,ทางโค้งกว้าง+ไม่มีความลาดชัน,0.1,0.099,1.01
+false_negative(300 lowest P),location,ทางโค้งกว้าง+ที่ลาดชัน,0.033,0.031,1.08
+false_negative(300 lowest P),region,Central,0.313,0.298,1.05
+false_negative(300 lowest P),region,Northeast,0.2,0.23,0.87
+false_negative(300 lowest P),region,North,0.163,0.109,1.49
+false_negative(300 lowest P),region,East,0.143,0.129,1.11
+false_negative(300 lowest P),weather,แจ่มใส,0.83,0.904,0.92
+false_negative(300 lowest P),weather,ฝนตก,0.16,0.08,2.0
+false_negative(300 lowest P),weather,missing,0.007,0.008,0.84
+false_negative(300 lowest P),weather,มีหมอก/ควัน/ฝุ่น,0.003,0.002,1.99
+false_negative(300 lowest P),agency,DOH (highways),0.957,0.91,1.05
+false_negative(300 lowest P),agency,DRR (rural roads),0.027,0.088,0.3
+false_negative(300 lowest P),agency,EXAT (expressways),0.017,0.002,7.96
+false_negative(300 lowest P),hour_mean,,11.587,12.38,
+false_negative(300 lowest P),n_vehicles_mean,,1.42,1.746,
+false_negative(300 lowest P),n_involved_mean,,1.427,1.826,
+false_positive(300 highest P),vehicle,motorcycle,0.687,0.097,7.05
+false_positive(300 highest P),vehicle,pickup/4-wheel truck,0.103,0.38,0.27
+false_positive(300 highest P),vehicle,car (private/public),0.08,0.28,0.29
+false_positive(300 highest P),vehicle,pedestrian,0.037,0.001,46.0
+false_positive(300 highest P),cause,ขับรถเร็วเกินอัตรากำหนด,0.603,0.688,0.88
+false_positive(300 highest P),cause,คน/รถ/สัตว์ตัดหน้ากระชั้นชิด,0.097,0.063,1.54
+false_positive(300 highest P),cause,ความประมาท/เร่งรีบ(วิ่งตัดหน้า),0.047,0.001,45.24
+false_positive(300 highest P),cause,ขับรถย้อนศร,0.043,0.005,9.15
+false_positive(300 highest P),acc_type,ชนท้าย,0.25,0.317,0.79
+false_positive(300 highest P),acc_type,พลิกคว่ำ/ตกถนนในทางตรง,0.163,0.429,0.38
+false_positive(300 highest P),acc_type,ชนสิ่งกีดขวาง(บนผิวจราจร),0.153,0.051,2.98
+false_positive(300 highest P),acc_type,missing,0.147,0.05,2.93
+false_positive(300 highest P),location,ทางตรง+ไม่มีความลาดชัน,0.74,0.699,1.06
+false_positive(300 highest P),location,missing,0.09,0.101,0.89
+false_positive(300 highest P),location,ทางโค้งกว้าง+ไม่มีความลาดชัน,0.077,0.105,0.73
+false_positive(300 highest P),location,ทางเชื่อมเข้าพื้นที่สาธารณะ/เชิงพาณิชย์,0.02,0.009,2.12
+false_positive(300 highest P),region,Northeast,0.333,0.179,1.86
+false_positive(300 highest P),region,Central,0.283,0.386,0.73
+false_positive(300 highest P),region,North,0.107,0.105,1.02
+false_positive(300 highest P),region,East,0.103,0.134,0.77
+false_positive(300 highest P),weather,แจ่มใส,0.91,0.864,1.05
+false_positive(300 highest P),weather,ฝนตก,0.063,0.127,0.5
+false_positive(300 highest P),weather,missing,0.017,0.006,2.65
+false_positive(300 highest P),weather,มืดครึ้ม,0.003,0.0,7.9
+false_positive(300 highest P),agency,DOH (highways),0.877,0.947,0.93
+false_positive(300 highest P),agency,DRR (rural roads),0.123,0.026,4.82
+false_positive(300 highest P),hour_mean,,13.56,11.918,
+false_positive(300 highest P),n_vehicles_mean,,1.653,1.554,
+false_positive(300 highest P),n_involved_mean,,1.817,1.558,
+false_negative(300 lowest P),deaths_mean,,1.127,1.166,
+false_positive(300 highest P),serious_mean,,0.427,0.101,
+false_positive(300 highest P),share_actually_injury_not_property,,0.917,0.494,

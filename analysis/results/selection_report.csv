@@ -1,0 +1,11 @@
+rank,model,variant,fatal_f1_mean,fatal_f1_std,macro_f1_mean,fatal_recall_mean,fatal_precision_mean,fatal_pr_auc_mean,gap_to_winner_mean,winner_ahead_in_folds
+1,lightgbm_tuned,class_weight,0.4443,0.0133,0.5489,0.5598,0.3771,0.4409,0.0,
+2,xgboost_tuned,class_weight,0.4442,0.0119,0.5431,0.5756,0.3676,0.4387,0.0001,3.0
+3,xgboost,class_weight,0.4431,0.0094,0.5356,0.5696,0.3646,0.4273,0.0012,2.0
+4,lightgbm_tuned,prior_adjusted,0.4417,0.0111,0.5435,0.588,0.3604,0.4427,0.0026,3.0
+5,xgboost_tuned,prior_adjusted,0.4415,0.0089,0.5372,0.6042,0.3513,0.4382,0.0028,3.0
+6,lightgbm,class_weight,0.4377,0.0189,0.5453,0.5471,0.372,0.4318,0.0066,3.0
+7,xgboost,prior_adjusted,0.437,0.0124,0.5337,0.5942,0.348,0.4304,0.0073,4.0
+8,lightgbm,prior_adjusted,0.4368,0.0131,0.5382,0.5902,0.3509,0.4325,0.0075,4.0
+9,random_forest,prior_adjusted,0.4222,0.0076,0.513,0.6842,0.3054,0.427,0.0221,4.0
+10,logistic_regression,class_weight,0.4037,0.0075,0.4976,0.5559,0.3207,0.3544,0.0405,4.0

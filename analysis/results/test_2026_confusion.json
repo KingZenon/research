@@ -1,0 +1,26 @@
+{
+  "classes": [
+    "fatal",
+    "injury",
+    "property_only"
+  ],
+  "rows": "actual",
+  "columns": "predicted",
+  "matrix": [
+    [
+      1145,
+      394,
+      197
+    ],
+    [
+      1729,
+      3187,
+      2957
+    ],
+    [
+      430,
+      1610,
+      5805
+    ]
+  ]
+}
