@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Team AHT research on road accident severity in Thailand: data, method, progress and results.">
   <title>Team AHT | Road Accident Severity in Thailand</title>
-  <link rel="stylesheet" href="styles.css?v=m4-20261124d">
-  <script src="project-data.js?v=m4-20261124d" defer></script>
-  <script src="results-data.js?v=m3-20261112i" defer></script>
+  <link rel="stylesheet" href="styles.css?v=m4-20261125a">
+  <script src="project-data.js?v=m4-20261124f" defer></script>
+  <script src="results-data.js?v=m4-20261124f" defer></script>
   <script src="figures-data.js?v=m4-20261124d" defer></script>
   <script src="map-data.js?v=m4-20261124d" defer></script>
-  <script src="final-data.js?v=m4-20261124d" defer></script>
-  <script src="script.js?v=m4-20261124d" defer></script>
+  <script src="final-data.js?v=m4-20261124f" defer></script>
+  <script src="script.js?v=m4-20261124f" defer></script>
 </head>
 <body>
   <noscript><div class="container noscript-note">This page needs JavaScript to show the data tables, charts, progress log, results and file links. The content is stored in project-data.js and results-data.js in the repository.</div></noscript>
@@ -35,12 +35,17 @@
   <main id="main">
     <section class="hero" id="home">
       <div class="container">
-        <p class="eyebrow">ICT324 · Classification research</p>
-        <h1>Predicting road accident <em>severity</em> in Thailand</h1>
-        <p class="hero-lead">Which crashes on Thailand's Ministry of Transport road network turn fatal? We classify each incident as fatal, injury, or property damage only, and test how well models find the fatal ones.</p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="#results">See the results <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 3v10m-4-4 4 4 4-4"/></svg></a>
-          <a class="button button-outline" href="#files">Project files <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 11 11 5M5 5h6v6"/></svg></a>
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">ICT324 · Classification research</p>
+            <h1>Predicting road accident <em>severity</em> in Thailand</h1>
+            <p class="hero-lead">Which crashes on Thailand's Ministry of Transport road network turn fatal? We classify each incident as fatal, injury, or property damage only, and test how well models find the fatal ones.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#results">See the results <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 3v10m-4-4 4 4 4-4"/></svg></a>
+              <a class="button button-outline" href="#files">Project files <svg class="icon-arrow" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5 11 11 5M5 5h6v6"/></svg></a>
+            </div>
+          </div>
+          <aside class="hero-visual" id="hero-visual" aria-label="Final result and province overview" hidden></aside>
         </div>
         <dl class="hero-meta">
           <div><dt>Team</dt><dd id="team-names">Team AHT: Aung Ko Ko Minn · Htoo Myat Htin Lynn · Thant Mg Mg Lwin</dd></div>
@@ -71,7 +76,7 @@
         </div>
         <div class="card"><h3>Related work</h3>
           <ul class="related-list" id="related-work"></ul>
-          <p class="small-note">Common finding: boosted trees do well, but fatal crashes are the ones models miss. We add a multi-year, three-class benchmark with temporal validation. Only Mohamad et al. was read in full; the others are from abstracts.</p>
+          <p class="small-note">Common finding: tree ensembles lead on tabular crash data, but fatal recall is rarely reported or remains low under random splits. We add a multi-year, three-class benchmark with rolling-origin temporal validation, calibrated thresholds, and a UK STATS19 replication.</p>
         </div>
       </div>
     </section>
@@ -269,6 +274,14 @@
           <h3 class="subhead">Where the threshold model finds fatal crashes</h3>
           <div class="table-scroll"><table><thead><tr><th>Subgroup (2025 validation year)</th><th>Fatal incidents</th><th>Fatal recall</th></tr></thead><tbody id="recheck-sub-rows"></tbody></table></div>
           <p class="small-note" id="recheck-errors"></p>
+          <div id="recheck-exp11" hidden>
+            <h3 class="subhead">Targeted follow-up: engineered features, alert tiers &amp; binary motorcycle model</h3>
+            <p class="card-sub" id="exp11-sub"></p>
+            <div class="table-scroll"><table><thead><tr><th>Follow-up check (2022–2025 folds)</th><th>Baseline</th><th>Upgraded</th></tr></thead><tbody id="exp11-rows"></tbody></table></div>
+            <h4 class="map-list-title">Calibrated alert tiers on the upgraded plain model (mean over 2022–2025 folds)</h4>
+            <div class="table-scroll"><table><thead><tr><th>Operating tier</th><th>Incidents flagged</th><th>Fatal recall</th><th>Fatal precision</th><th>Fatal F1</th></tr></thead><tbody id="exp11-tier-rows"></tbody></table></div>
+            <p class="small-note" id="exp11-note"></p>
+          </div>
         </div>
         <h3 class="subhead">Status and open issues</h3>
         <div class="card-grid three" id="draft-status"></div>

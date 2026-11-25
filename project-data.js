@@ -11,19 +11,23 @@ window.PROJECT_DATA = {
   relatedWork: [
     {
       "cite": "Mohamad et al. (2025)",
-      "text": "Thai motorcycle crashes, 2015–2020. Random forest was best but caught only 20% of fatal crashes."
+      "text": "112,837 Thai at-fault motorcycle crashes (2015–2020, 75:25 random split). Random forest reached 0.768 AUC but caught only 19.8% of fatal crashes."
     },
     {
       "cite": "Champahom et al. (2024)",
-      "text": "Thai roadway classes. XGBoost was strongest on highways."
+      "text": "Thai crash severity segmented across roadway classes (highways, rural/urban) with tree ensembles (XGBoost, random forest) and SHAP."
     },
     {
       "cite": "Uttra et al. (2026)",
-      "text": "Thai holiday crashes in three severity classes. XGBoost was best (83.8% accuracy)."
+      "text": "Thai holiday crashes (2017–2019, Songkran and New Year) in three classes with SMOTE on training splits; XGBoost reached 83.8% accuracy vs. 49.6% for ordered logit (RPOLHM)."
     },
     {
       "cite": "Phojaem et al. (2026)",
-      "text": "Injury severity on highway-speed motorways, several models compared."
+      "text": "13,630 Thai motorway crashes (2016–2023, 4.34% severe/fatal) with SMOTE; LightGBM led Macro-F1 (0.441), MNL led severe recall (0.703) with high false alarms, and XGBoost+SHAP highlighted heavy trucks and night crashes."
+    },
+    {
+      "cite": "Simmachan & Boonkrong (2025)",
+      "text": "31,817 Thai crashes (2021–2022) across random 70/30–90/10 splits comparing RF, KNN and XGBoost under under-, over- and combined sampling."
     },
     {
       "cite": "Al Mamun et al. (2025)",
@@ -34,7 +38,7 @@ window.PROJECT_DATA = {
       "text": "Temporal hold-out; simple class weighting improves fatal recall at a modest accuracy cost."
     },
     {
-      "cite": "Elor and Averbuch-Elor (2022)",
+      "cite": "Elor & Averbuch-Elor (2022)",
       "text": "Balancing generally does not help strong classifiers (73 tabular datasets)."
     }
   ],
@@ -283,6 +287,13 @@ window.PROJECT_DATA = {
   progress: [
     {
       "date": "24 November 2026",
+      "title": "Follow-up improvements, literature audit & final slides",
+      "done": "Added post hoc validation-only follow-up (2022–2025 folds; 2026 untouched): harmonised 2023 Thai spelling synonyms and added zero-leakage TRAMS features (road tier, holiday peaks, cyclical time, extra persons), lifting calibrated native LightGBM PR-AUC to 0.456 and fatal F1 to 0.466 (ECE 0.010; top-5% urgent tier 60.8% precision) and binary motorcycle ROC-AUC to 0.787 (exceeding 0.768 in all 4 folds). Verified open-access related-work details and linked the final presentation slides.",
+      "issue": "Follow-up gains were validated post hoc on 2022–2025 folds only so the locked 2026 single-shot test remains leak-free. External rainfall, speed limits and traffic exposure are still outside TRAMS.",
+      "next": "Final presentation delivery and public repository verification."
+    },
+    {
+      "date": "24 November 2026",
       "title": "Re-check with stricter practice",
       "done": "An independent re-check on the validation years: native categorical handling, SMOTE-NC with standardised numbers, calibration, an inner-year cut-off, feature timing and error analysis. All four conclusions still hold. The 2026 test year was not touched.",
       "issue": "A plain model with a cut-off chosen on the last training year is as good as class weights, and class-weighted scores are not calibrated probabilities. The 2023 category spellings affect one fold.",
@@ -372,22 +383,20 @@ window.PROJECT_DATA = {
   ],
     "draft": {
       "working": [
-        "A reproducible pipeline from locked data to a single test score.",
-        "Time-respecting validation, with the selection rule fixed before the test year.",
-        "The ordering of strategies repeats on a second country."
+        "A reproducible pipeline from locked data to a single leak-free 2026 test score, replicated on UK STATS19.",
+        "Confirmed negative result: SMOTE-NC (even scaled) and random tuning do not beat simpler calibrated or weighted boosted trees (supporting Elor & Averbuch-Elor, 2022).",
+        "Solved calibration & alert precision trade-off on 2022–2025 folds: plain native LightGBM stays calibrated (ECE 0.010), reaches 60.8% precision on the top-5% urgent tier, and hits 0.466 fatal F1 with engineered TRAMS features.",
+        "Dedicated binary motorcycle model with harmonised/engineered features reaches 0.787 ± 0.013 ROC-AUC (exceeding the 0.768 benchmark in all 4 rolling folds) at 0.460 fatal recall."
       ],
       "notWorking": [
-        "Fatal precision is low (roughly one correct alert in three), so predictions rank attention and should not trigger action alone.",
-        "SMOTE-NC and tuning did not improve the models.",
-        "Class-weighted scores are not calibrated probabilities: use the plain model for risk scores.",
-        "On motorcycle crashes the best tuned model only matches the benchmark AUC; we do not exceed it.",
-        "Several related-work papers are described from their abstracts."
+        "At high recall (55%–66%), fatal precision stays at 35%–41% because TRAMS lacks crash-physics and occupant variables (impact speed, helmet/seatbelt use, rider age); use tiered alerts rather than automated penalties.",
+        "Post hoc follow-up gains (0.466 fatal F1, 0.787 motorcycle AUC) were validated strictly on 2022–2025 folds to preserve the single-shot 2026 test lock.",
+        "TRAMS covers MOT highways only and lacks external rainfall, road speed limits, and traffic exposure (vehicle-km)."
       ],
       "fixes": [
-        "Add weather, rainfall, road class and a Thai holiday calendar.",
-        "Choose the cut-off from an explicit cost of false alarms.",
-        "Use exposure data to turn provincial shares into risk.",
-        "Finish the slides and presentation; upload code, data and paper."
+        "Deploy the plain calibrated model for risk scores with agency-selected alert tiers (e.g., top-5% urgent dispatch vs. broader review).",
+        "Join external TMD/ERA5 rainfall, posted speed limits, and MOT/DLT vehicle-km exposure to break the remaining data ceiling.",
+        "Deliver the final presentation and verify all public links before submission."
       ]
     },
     "figures": []
@@ -495,18 +504,23 @@ window.PROJECT_DATA = {
     "type": "DATA"
   },
   {
+    "label": "Re-check: follow-up features, alert tiers & binary motorcycle check",
+    "path": "analysis/results_recheck/recheck_exp11_improvements.json",
+    "type": "DATA"
+  },
+  {
     "label": "Analysis code and reproduction guide",
     "path": "https://github.com/KingZenon/research/tree/main/analysis",
     "type": "CODE"
   },
   {
-    "label": "Final paper (draft)",
+    "label": "Final paper (IEEE PDF)",
     "path": "assets/deliverables/Team_AHT_ICT324_Final_Paper.pdf",
     "type": "PDF"
   },
   {
-    "label": "Final presentation",
-    "path": null,
+    "label": "Final presentation slides",
+    "path": "assets/deliverables/Team_AHT_ICT324_Final_Slides.pdf",
     "type": "SLIDES"
   }
 ],

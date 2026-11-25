@@ -822,6 +822,33 @@ function renderRecheck() {
   rc.subgroups.forEach(item => addRow(sub, [item.label, count(item.nFatal), score(item.recall)]));
   const e = rc.errors;
   byId("recheck-errors").textContent = `Among the 300 fatal incidents with the lowest scores, pickups (${percent(e.fnPickup, 0)}) and cars (${percent(e.fnCar, 0)}) are over-represented and motorcycles (${percent(e.fnMotorcycle, 0)}) under-represented. The 300 highest-scored false alarms are ${percent(e.fpMotorcycle, 0)} motorcycles.`;
+
+  const exp11 = rc.exp11;
+  if (exp11 && exp11.main_thai && exp11.motorcycle_binary) {
+    byId("recheck-exp11").hidden = false;
+    const base = exp11.main_thai.find(x => x.label === "baseline_native_17");
+    const harm = exp11.main_thai.find(x => x.label === "harmonized_2023_only");
+    const up = exp11.main_thai.find(x => x.label === "harmonized_plus_engineered");
+    const mBase = exp11.motorcycle_binary.models.find(x => x.label === "binary_lgbm_native_base");
+    const mUp = exp11.motorcycle_binary.models.find(x => x.label === "binary_lgbm_native_upgraded_tuned");
+    byId("exp11-sub").textContent = "Post hoc validation-only check (2022–2025 rolling folds; 2026 never loaded): harmonising 2023 Thai spelling synonyms, adding zero-leakage TRAMS features (road tier from route, Thai holiday peaks, cyclical hour/month, extra persons), tiered calibrated cut-offs, and a dedicated binary motorcycle classifier.";
+    const erows = byId("exp11-rows");
+    addRow(erows, ["Main Thai: 2023 spelling harmonisation (PR-AUC / F1)", `${score(base.fatal_pr_auc_mean)} / ${score(base.fatal_f1_thr_mean)}`, `${score(harm.fatal_pr_auc_mean)} / ${score(harm.fatal_f1_thr_mean)}`]);
+    addRow(erows, ["Main Thai: + engineered features (PR-AUC / F1)", `${score(base.fatal_pr_auc_mean)} / ${score(base.fatal_f1_thr_mean)}`, `${score(up.fatal_pr_auc_mean)} / ${score(up.fatal_f1_thr_mean)} ± ${score(up.fatal_f1_thr_sd)} (4/4 folds ahead, ECE ${score(up.ece_fatal_mean)})`]);
+    addRow(erows, ["Motorcycle binary LightGBM (ROC-AUC / Recall)", `${score(mBase.fatal_auc_mean)} / ${score(mBase.fatal_recall_mean)} (benchmark 0.768 / 0.198)`, `${score(mUp.fatal_auc_mean)} ± ${score(mUp.fatal_auc_sd)} / ${score(mUp.fatal_recall_mean)} (exceeds 0.768 in 4/4 folds)`]);
+    const trows = byId("exp11-tier-rows");
+    const tierLabels = [
+      ["top5", "Urgent tier (top ~5%, P ≥ 0.50)"],
+      ["top10", "Priority tier (top ~10%, P ≥ 0.32)"],
+      ["thr_f1_inner", "Balanced F1 cut-off (inner year, P ≥ 0.22)"],
+      ["thr_cost5", "High-recall 5:1 cost cut-off (P ≥ 0.17)"]
+    ];
+    tierLabels.forEach(([key, label]) => {
+      const tier = up.tiers[key];
+      if (tier) addRow(trows, [label, percent(tier.flagged_share), score(tier.recall), score(tier.precision), score(tier.f1)]);
+    });
+    byId("exp11-note").textContent = "Because these upgrades were developed after inspecting validation errors, they are reported strictly on 2022–2025 rolling folds and were never scored on the locked 2026 test year. They demonstrate that better domain features and calibrated alert tiers—not SMOTE or random tuning—move the precision–recall curve.";
+  }
 }
 
 /* ---------- files, references, team ---------- */
@@ -925,7 +952,88 @@ function setupNavigation() {
   window.addEventListener("scroll", hideTooltip, { passive: true });
 }
 
+function renderHeroVisual() {
+  const host = byId("hero-visual");
+  if (!host || !finalData || !finalData.test) return;
+  const test = finalData.test, sel = finalData.selection;
+  const metric = key => test.metrics.find(item => item.key === key);
+  const recall = metric("fatal_recall"), prec = metric("fatal_precision"), f1 = metric("fatal_f1"), auc = metric("fatal_auc");
+  const hit = test.confusion[0][0], fatalTotal = rowSum(test.confusion[0]);
+  const plainLgbm = finalData.thai && finalData.thai.lightgbm
+    ? finalData.thai.lightgbm.find(item => item.variant === "default")
+    : null;
+
+  host.hidden = false;
+  host.textContent = "";
+
+  const head = addText(host, "div", "", "hero-card-head");
+  addText(head, "span", `${test.year} test · scored once`, "hero-pill");
+  addText(head, "span", `${sel.model} · ${sel.variantLabel}`, "hero-card-model");
+
+  const body = addText(host, "div", "", "hero-card-body");
+  const left = addText(body, "div", "");
+  addText(left, "span", percent(recall.value), "hero-kpi-value");
+  addText(left, "span", "Fatal crashes detected", "hero-kpi-label");
+  addText(left, "span", `${count(hit)} of ${count(fatalTotal)} fatal incidents in ${test.year}`, "hero-kpi-sub");
+
+  const bars = addText(left, "div", "", "hero-bars");
+  const barItems = [];
+  if (plainLgbm) barItems.push({ label: "Plain LightGBM (CV)", value: plainLgbm.fatal_recall, color: "#6fa6e8" });
+  barItems.push({ label: `Selected model (${test.year})`, value: recall.value, color: "#f28d63" });
+  barItems.forEach(item => {
+    const row = addText(bars, "div", "", "hero-bar-row");
+    const meta = addText(row, "div", "", "hero-bar-meta");
+    addText(meta, "span", item.label);
+    addText(meta, "strong", percent(item.value));
+    const track = addText(row, "div", "", "hero-bar-track");
+    const fill = addText(track, "div", "", "hero-bar-fill");
+    fill.style.width = `${Math.max(4, Math.min(100, item.value * 100)).toFixed(1)}%`;
+    fill.style.background = item.color;
+  });
+
+  const mini = addText(left, "div", "", "hero-mini-grid");
+  [[score(prec.value), "Precision"], [score(f1.value), "Fatal F1"], [score(auc.value), "ROC-AUC"]].forEach(([val, label]) => {
+    const box = addText(mini, "div", "", "hero-mini-stat");
+    addText(box, "strong", val);
+    addText(box, "span", label);
+  });
+
+  if (mapData && mapData.provinces && mapData.provinces.length) {
+    const mapWrap = addText(body, "div", "", "hero-card-map");
+    const ramp = ["rgba(134,182,239,.20)", "rgba(134,182,239,.36)", "rgba(134,182,239,.56)", "rgba(134,182,239,.78)", "#a9cbf3"];
+    const provinces = mapData.provinces.map(p => ({ ...p, share: p.fatal / p.incidents }));
+    const values = provinces.map(p => p.share).sort((a, b) => a - b);
+    const breaks = [.2, .4, .6, .8].map(q => values[Math.floor(q * (values.length - 1))]);
+    const bucket = v => breaks.filter(b => v >= b).length;
+    const svg = svgEl("svg", { viewBox: `0 0 ${mapData.width} ${mapData.height}`, role: "group",
+      "aria-label": `Mini map of Thailand's ${provinces.length} provinces shaded by fatal share` }, mapWrap);
+    provinces.forEach(p => {
+      const path = svgEl("path", {
+        class: "hero-map-province",
+        d: p.d,
+        "fill-rule": "evenodd",
+        fill: ramp[bucket(p.share)],
+        tabindex: 0,
+        role: "img",
+        "aria-label": `${p.name}: ${percent(p.share)} fatal (${count(p.fatal)} of ${count(p.incidents)})`
+      }, svg);
+      addHover(path, null, `${p.name} · ${p.thai}`, [
+        { color: "#2a78d6", value: percent(p.share), name: "fatal share" },
+        { value: count(p.fatal), name: `fatal of ${count(p.incidents)} incidents` }
+      ]);
+      path.addEventListener("click", () => {
+        const target = byId("map-card");
+        if (target) target.scrollIntoView({ behavior: "smooth" });
+      });
+    });
+    const cap = addText(mapWrap, "p", `${provinces.length} provinces · `, "hero-map-caption");
+    const link = addText(cap, "a", "Explore map");
+    link.href = "#map-card";
+  }
+}
+
 renderOverview();
+renderHeroVisual();
 renderRelatedWork();
 renderData();
 renderSeverityBar();

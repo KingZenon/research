@@ -369,11 +369,11 @@ def build(results_dir, paper_dir):
     # ---------------- II. Related work
     heading1(doc, "II", "Related Work")
     para(doc, f"<i>Thai crash severity.</i> Mohamad <i>et al.</i> {c('mohamad')} compared eight models on 112,837 incidents (2015–2020) caused by motorcycle riders, with a random 75:25 split, and found "
-              f"a random forest best overall but weak at recalling fatal cases. Champahom <i>et al.</i> {c('champahom')} studied tree-based models across roadway classes, with XGBoost "
-              f"strongest on highways. Uttra <i>et al.</i> {c('uttra')} classified holiday-period crashes into three severity classes, where XGBoost was best (83.8% accuracy). "
-              f"Phojaem <i>et al.</i> {c('phojaem')} compared several models on highway-speed motorways. Simmachan and Boonkrong {c('simmachan')} compared "
-              f"under-, over- and combined sampling for fatal versus non-fatal Thai crashes and conclude that the choice of resampling technique matters. Tree "
-              f"ensembles are among the best models in these studies, but only {c('mohamad')} reports fatal-class recall, and it was low.")
+              f"a random forest best overall (0.768 AUC) but weak at recalling fatal cases (0.198). Champahom <i>et al.</i> {c('champahom')} segmented Thai crashes across roadway classes using tree ensembles (XGBoost, random forest) with SHAP. "
+              f"Uttra <i>et al.</i> {c('uttra')} classified 2017–2019 holiday-period crashes (Songkran and New Year) into three severity classes using SMOTE inside training splits, where XGBoost reached 83.8% accuracy versus 49.6% for ordered logit. "
+              f"Phojaem <i>et al.</i> {c('phojaem')} compared statistical, boosted-tree and neural models on 13,630 Thai motorway crashes (2016–2023, 4.34% severe/fatal) with SMOTE: LightGBM led Macro-F1 (0.441), multinomial logit led severe recall (0.703) with high false alarms, and XGBoost with SHAP highlighted heavy trucks and night crashes. "
+              f"Simmachan and Boonkrong {c('simmachan')} compared under-, over- and combined sampling on 31,817 Thai crashes (2021–2022) across random 70:30–90:10 splits and found combined sampling helped tree models. "
+              f"Tree ensembles lead across these studies, yet none combine imbalance comparisons with rolling-origin temporal validation and a single-shot hold-out year.")
     para(doc, f"<i>Imbalance and evaluation.</i> SMOTE {c('chawla')} synthesises minority examples by interpolation. Al Mamun <i>et al.</i> {c('mamun')} compared balancing "
               f"techniques for work-zone crashes and found lower accuracy for high-severity crashes because of imbalance. Zhu <i>et al.</i> {c('zhu')} used a "
               f"temporally held-out test set and found that simple class weighting improves fatal recall with a modest accuracy cost. Elor and Averbuch-Elor "
@@ -595,6 +595,22 @@ def build(results_dir, paper_dir):
               f"under-represented, and {pc(float(top_fn_type.share_in_errors), 0)} are rollovers or run-offs on straight roads. The 300 highest-scored false alarms are "
               f"{pc(ep_share(fp_rows, 'vehicle', 'motorcycle'), 0)} motorcycles.", before=2, indent=0.17)
 
+    exp11_file = RCD / "recheck_exp11_improvements.json"
+    if not exp11_file.exists():
+        exp11_file = R / "recheck_exp11_improvements.json"
+    if exp11_file.exists():
+        E11 = json.loads(exp11_file.read_text(encoding="utf-8"))
+        e11_up = next(x for x in E11["main_thai"] if x["label"] == "harmonized_plus_engineered")
+        e11_m = next(x for x in E11["motorcycle_binary"]["models"] if x["label"] == "binary_lgbm_native_upgraded_tuned")
+        para(doc, f"<i>Targeted follow-up (validation folds only).</i> Harmonising the main 2023 Thai spelling synonyms and adding zero-leakage features from existing TRAMS columns "
+                  f"(coarse road tier extracted from the route field, Songkran/New Year holiday peaks, cyclical hour and month, and explicit extra persons) lifts calibrated plain native LightGBM "
+                  f"mean PR-AUC from {f3(nat_pr.mean())} to {f3(e11_up['fatal_pr_auc_mean'])} and inner-year threshold fatal F1 to {f3(e11_up['fatal_f1_thr_mean'])} ± {f3(e11_up['fatal_f1_thr_sd'])} "
+                  f"(ahead in all four folds, ECE {f3(e11_up['ece_fatal_mean'])}). On those calibrated probabilities, a top-5% urgent tier (P ≥ {f2(e11_up['tiers']['top5']['threshold'])}) reaches "
+                  f"{pc(e11_up['tiers']['top5']['precision'])} precision at {pc(e11_up['tiers']['top5']['recall'])} recall, while a top-10% priority tier reaches {pc(e11_up['tiers']['top10']['precision'])} precision. "
+                  f"On the motorcycle subset, switching to a dedicated binary fatal-versus-rest native LightGBM with the same harmonised and engineered features (nested ROC-AUC tuning) reaches "
+                  f"ROC-AUC {f3(e11_m['fatal_auc_mean'])} ± {f3(e11_m['fatal_auc_sd'])} (exceeding the 0.768 benchmark in all four rolling folds) at fatal recall {f3(e11_m['fatal_recall_mean'])} "
+                  f"and precision {f3(e11_m['fatal_precision_mean'])}. Because these additions were post hoc, 2026 remains untouched.")
+
     # ---------------- VI. Discussion
     heading1(doc, "VI", "Discussion and Limitations")
     para(doc, f"<i>What the results mean.</i> The choice of cut-off, not model complexity, decides how many fatal crashes are found. In Thailand the strategies share one "
@@ -610,8 +626,8 @@ def build(results_dir, paper_dir):
               f"threshold were checked only in a post hoc re-check on the validation folds (Section V-G), and there is no simple-rule baseline (a vehicle-type-only "
               f"model would be informative). Importance is descriptive, not causal. Presumed cause, accident type and the people count are filed after attendance, "
               f"so a first-call model would be weaker. The UK table has no vehicle type, accident type or cause, its first fold trains on a single COVID-affected "
-              f"year, and its classes differ from the Thai ones. The motorcycle comparison is not like for like, and its best model was chosen on the same folds it "
-              f"is reported on. Several related-work papers {c('champahom', 'uttra', 'phojaem')} are described from their abstracts.")
+              f"year, and its classes differ from the Thai ones. The motorcycle comparison is not like for like, and post hoc upgrades were checked on validation folds only. "
+              f"For paywalled {c('phojaem')}, figures were verified from its institutional summary rather than the publisher PDF.")
     para(doc, f"<i>Intended use.</i> The data hold no personal information. The model supports prioritising response and inspection; it must not be used to assign "
               f"blame, set insurance or penalise individuals, since precision is about {pc(test['fatal_precision'], 0)}.")
 

@@ -166,6 +166,11 @@ def main(csv, results_dir, site_dir):
             "errors": {"fnPickup": share("false_negative", "vehicle", "pickup/4-wheel truck"), "fnCar": share("false_negative", "vehicle", "car (private/public)"),
                        "fnMotorcycle": share("false_negative", "vehicle", "motorcycle"), "fpMotorcycle": share("false_positive", "vehicle", "motorcycle")},
         }
+        exp11_path = RCD / "recheck_exp11_improvements.json"
+        if not exp11_path.exists():
+            exp11_path = R / "recheck_exp11_improvements.json"
+        if exp11_path.exists():
+            payload["recheck"]["exp11"] = json.loads(exp11_path.read_text(encoding="utf-8"))
     text = ("/* Generated file: do not edit by hand. Run analysis/code/export_final_results.py to rebuild. */\n"
             "window.FINAL_DATA = " + json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + ";\n")
     (site / "final-data.js").write_text(text, encoding="utf-8")
