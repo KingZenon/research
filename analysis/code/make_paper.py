@@ -240,8 +240,15 @@ def build(results_dir, paper_dir):
     pc = lambda x, d=1: f"{x * 100:.{d}f}%"
     ci = lambda name: f"{BOOT.loc[name, 'ci_low']:.3f}–{BOOT.loc[name, 'ci_high']:.3f}"
 
+    def site_file(name):
+        # website data files: <project>/website/ in the working layout, <package>/site_data/ in the Drive package
+        for d in (P.parent.parent / "website", P.parent / "site_data"):
+            if (d / name).exists():
+                return (d / name).read_text(encoding="utf-8")
+        raise FileNotFoundError(f"{name} not found in website/ or site_data/")
+
     # cross-checks of audit numbers that are quoted from the data audit (site / project-data.js)
-    site = (P.parent.parent / "website" / "project-data.js").read_text(encoding="utf-8")
+    site = site_file("project-data.js")
     for needle in ("195,054", "25,031", "1,254", "170,022", "77 provinces"):
         assert needle in site, needle
     ct = N["class_totals"]
@@ -276,7 +283,7 @@ def build(results_dir, paper_dir):
     moto_rf = ("random_forest", "default")
     moto_pos = 0.302
     RECODE = json.loads((R / "category_recode_2023.json").read_text(encoding="utf-8"))["share_unseen_in_2019_2022"]
-    fig_js = (P.parent.parent / "website" / "figures-data.js").read_text(encoding="utf-8")
+    fig_js = site_file("figures-data.js")
     abl = json.loads(fig_js[fig_js.index("{"): fig_js.rindex("}") + 1])["importance"]["check"]
     assert abs(abl["with"]["fatalF1"] - abl["without"]["fatalF1"]) < 0.01, abl
     tune_gain = g("lightgbm_tuned", "default", "fatal_pr_auc") - g(lg, "default", "fatal_pr_auc")

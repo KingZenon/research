@@ -390,7 +390,7 @@ window.PROJECT_DATA = {
       ],
       "notWorking": [
         "At high recall (55%–66%), fatal precision stays at 35%–41% because TRAMS lacks crash-physics and occupant variables (impact speed, helmet/seatbelt use, rider age); use tiered alerts rather than automated penalties.",
-        "Post hoc follow-up gains (0.466 fatal F1, 0.787 motorcycle AUC) were validated strictly on 2022–2025 folds to preserve the single-shot 2026 test lock.",
+        "Post hoc follow-up gains (0.465 fatal F1, 0.787 motorcycle AUC) were validated strictly on 2022–2025 folds to preserve the single-shot 2026 test lock.",
         "TRAMS covers MOT highways only and lacks external rainfall, road speed limits, and traffic exposure (vehicle-km)."
       ],
       "fixes": [
