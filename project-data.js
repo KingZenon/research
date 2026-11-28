@@ -4,7 +4,7 @@
  * See README.md for the exact update steps and file locations.
  */
 window.PROJECT_DATA = {
-  lastUpdated: "24 November 2026",
+  lastUpdated: "28 November 2026",
   teamName: "Team AHT",
 
   // Short related-work items and cleaning steps (one line each).
@@ -96,7 +96,7 @@ window.PROJECT_DATA = {
     "id": "M4",
     "title": "Final submission",
     "date": "24 / 26 November",
-    "state": "current"
+    "state": "done"
   }
 ],
 
@@ -288,7 +288,7 @@ window.PROJECT_DATA = {
     {
       "date": "24 November 2026",
       "title": "Follow-up improvements, literature audit & final slides",
-      "done": "Added post hoc validation-only follow-up (2022–2025 folds; 2026 untouched): harmonised 2023 Thai spelling synonyms and added zero-leakage TRAMS features (road tier, holiday peaks, cyclical time, extra persons), lifting calibrated native LightGBM PR-AUC to 0.456 and fatal F1 to 0.466 (ECE 0.010; top-5% urgent tier 60.8% precision) and binary motorcycle ROC-AUC to 0.787 (exceeding 0.768 in all 4 folds). Verified open-access related-work details and linked the final presentation slides.",
+      "done": "Added post hoc validation-only follow-up (2022–2025 folds; 2026 untouched): harmonised 2023 Thai spelling synonyms and added zero-leakage TRAMS features (road tier, holiday peaks, cyclical time, extra persons), lifting calibrated native LightGBM PR-AUC to 0.456 and fatal F1 to 0.465 (ECE 0.010; top-5% urgent tier 60.8% precision) and binary motorcycle ROC-AUC to 0.787 (exceeding 0.768 in all 4 folds). Verified open-access related-work details and linked the final presentation slides.",
       "issue": "Follow-up gains were validated post hoc on 2022–2025 folds only so the locked 2026 single-shot test remains leak-free. External rainfall, speed limits and traffic exposure are still outside TRAMS.",
       "next": "Final presentation delivery and public repository verification."
     },
@@ -385,7 +385,7 @@ window.PROJECT_DATA = {
       "working": [
         "A reproducible pipeline from locked data to a single leak-free 2026 test score, replicated on UK STATS19.",
         "Confirmed negative result: SMOTE-NC (even scaled) and random tuning do not beat simpler calibrated or weighted boosted trees (supporting Elor & Averbuch-Elor, 2022).",
-        "Solved calibration & alert precision trade-off on 2022–2025 folds: plain native LightGBM stays calibrated (ECE 0.010), reaches 60.8% precision on the top-5% urgent tier, and hits 0.466 fatal F1 with engineered TRAMS features.",
+        "Solved calibration & alert precision trade-off on 2022–2025 folds: plain native LightGBM stays calibrated (ECE 0.010), reaches 60.8% precision on the top-5% urgent tier, and hits 0.465 fatal F1 with engineered TRAMS features.",
         "Dedicated binary motorcycle model with harmonised/engineered features reaches 0.787 ± 0.013 ROC-AUC (exceeding the 0.768 benchmark in all 4 rolling folds) at 0.460 fatal recall."
       ],
       "notWorking": [
